@@ -67,6 +67,7 @@
     <Compile Include="Model\OpportunityCounting.cs" />
     <Compile Include="OpportunityAnalysis.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="UpdateNotesCount.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
