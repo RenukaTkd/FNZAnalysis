@@ -58,6 +58,7 @@ namespace FNZAnalysis
                     string pre_red_stage = null;
 
                     string pre_red_sltmember = null;
+                    string postSltmember = null;
 
                     string pre_red_ifyes = null;
 
@@ -82,6 +83,7 @@ namespace FNZAnalysis
                     string pre_red_includeintherevenueforecast = null;
 
                     string pre_opportunityratingcode = null;
+                    string preopportunitycode = null;
 
                     string pre_StatusCode = null;
 
@@ -140,6 +142,8 @@ namespace FNZAnalysis
 
                     string post_name = null;
 
+                    string post_uniqueid = null;
+
                     string post_red_stage = null;
 
                     string post_red_sltmember = null;
@@ -149,10 +153,12 @@ namespace FNZAnalysis
                     string post_red_opptype = null;
 
                     string post_estimatedclosedate = null;
+                    string Post_modifiedon = null;
 
                     string post_description = null;
 
                     string post_opportunityratingcode = null;
+                    string postopportunitycode = null;
 
                     string post_StatusCode = null;
 
@@ -177,7 +183,9 @@ namespace FNZAnalysis
 
                     EntityReference post_parentcontactid = null;
 
-                    EntityReference post_modifiedby = null;
+                   EntityReference post_modifiedby = null;
+
+                   EntityReference post_dealowner = null;
 
                     EntityReference post_transactioncurrencyid = null;
 
@@ -233,6 +241,8 @@ namespace FNZAnalysis
 
                     // In below leadimage has been added in plugin registration tool
                     //get PreImage from Context
+                    
+                    
                     if (context.PreEntityImages.Contains("OpportunityAnalysisImage") && context.PreEntityImages["OpportunityAnalysisImage"] is Entity)
                     {
                         Entity preMessageImage = (Entity)context.PreEntityImages["OpportunityAnalysisImage"];
@@ -313,8 +323,10 @@ namespace FNZAnalysis
                             pre_red_opptype = ((OptionSetValue)preMessageImage.Attributes["red_opptype"]).Value.ToString();
 
                         if (preMessageImage.Attributes.Contains("opportunityratingcode"))
+                        {
                             pre_opportunityratingcode = ((OptionSetValue)preMessageImage.Attributes["opportunityratingcode"]).Value.ToString();
-
+                            preopportunitycode = preMessageImage.FormattedValues.Where(x => x.Key == "opportunityratingcode").Select(y => y.Value).First().ToString();
+                        }
 
                         if (preMessageImage.Attributes.Contains("statecode"))
                             pre_StatusCode = ((OptionSetValue)preMessageImage.Attributes["statecode"]).Value.ToString();
@@ -323,10 +335,10 @@ namespace FNZAnalysis
                             pre_statusreason = ((OptionSetValue)preMessageImage.Attributes["statuscode"]).Value.ToString();
 
                         if (preMessageImage.Attributes.Contains("red_probability"))
-                        { 
+                        {
                             pre_red_probability = ((OptionSetValue)preMessageImage.Attributes["red_probability"]).Value.ToString();
-                        preProbabilityValue = preMessageImage.FormattedValues.Where(x => x.Key == "red_probability").Select(y => y.Value).First().ToString();
-                    }
+                            preProbabilityValue = preMessageImage.FormattedValues.Where(x => x.Key == "red_probability").Select(y => y.Value).First().ToString();
+                        }
 
                         if (preMessageImage.Attributes.Contains("red_regulatorypermissions"))
                             pre_red_regulatorypermissions = ((OptionSetValue)preMessageImage.Attributes["red_regulatorypermissions"]).Value.ToString();
@@ -339,8 +351,9 @@ namespace FNZAnalysis
                         if (preMessageImage.Attributes.Contains("red_sltmember"))
                             pre_red_sltmember = ((OptionSetValue)preMessageImage.Attributes["red_sltmember"]).Value.ToString();
 
-                    // if (preMessageImage.Attributes.Contains("red_multisolution"))
-                      //     pre_red_multisolution = preMessageImage.GetAttributeValue < OptionSetValueCollection > ("red_multisolution").ToString();
+
+                        // if (preMessageImage.Attributes.Contains("red_multisolution"))
+                        //     pre_red_multisolution = preMessageImage.GetAttributeValue < OptionSetValueCollection > ("red_multisolution").ToString();
 
                         if (preMessageImage.Attributes.Contains("red_includeintherevenueforecast"))
                         {
@@ -356,10 +369,10 @@ namespace FNZAnalysis
 
                         if (preMessageImage.Attributes.Contains("red_territory"))
                             pre_red_territory = (EntityReference)preMessageImage.Attributes["red_territory"];
-                            pre_red_territory = (EntityReference)preMessageImage.Attributes["red_territory"];
+                        pre_red_territory = (EntityReference)preMessageImage.Attributes["red_territory"];
 
                         if (preMessageImage.Attributes.Contains("modifiedby"))
-                            pre_modifiedby = (EntityReference)preMessageImage.Attributes["modifiedby"];
+                        pre_modifiedby = (EntityReference)preMessageImage.Attributes["modifiedby"];
 
                         if (preMessageImage.Attributes.Contains("red_division"))
                             pre_red_division = (EntityReference)preMessageImage.Attributes["red_division"];
@@ -461,7 +474,7 @@ namespace FNZAnalysis
                                 post_red__bps_cal = ((Money)bpsValuePost).Value.ToString();
                         }
 
-                       
+
 
                         if (postMessageImage.Attributes.Contains("red__basepoint"))
                             post_red__basepoint = ((decimal)postMessageImage.Attributes["red__basepoint"]).ToString();
@@ -475,7 +488,7 @@ namespace FNZAnalysis
                         if (postMessageImage.Attributes.Contains("red_probability"))
                         {
                             post_red_probability = ((OptionSetValue)postMessageImage.Attributes["red_probability"]).Value.ToString();
-                           
+
                             postProbabilityValue = postMessageImage.FormattedValues.Where(x => x.Key == "red_probability").Select(y => y.Value).First().ToString();
                         }
                         if (postMessageImage.Attributes.Contains("red_regulatorypermissions"))
@@ -483,14 +496,16 @@ namespace FNZAnalysis
 
                         if (postMessageImage.Attributes.Contains("red_stage"))
                         {
-                         
-                                post_red_stage = ((OptionSetValue)postMessageImage.Attributes["red_stage"]).Value.ToString();
-                          postStageValue = postMessageImage.FormattedValues.Where(x => x.Key == "red_stage").Select(y=> y.Value).First().ToString();
+
+                            post_red_stage = ((OptionSetValue)postMessageImage.Attributes["red_stage"]).Value.ToString();
+                            postStageValue = postMessageImage.FormattedValues.Where(x => x.Key == "red_stage").Select(y => y.Value).First().ToString();
                         }
 
                         if (postMessageImage.Attributes.Contains("opportunityratingcode"))
+                        {
                             post_opportunityratingcode = ((OptionSetValue)postMessageImage.Attributes["opportunityratingcode"]).Value.ToString();
-
+                            postopportunitycode = postMessageImage.FormattedValues.Where(x => x.Key == "opportunityratingcode").Select(y => y.Value).First().ToString();
+                        }
 
                         if (postMessageImage.Attributes.Contains("statecode"))
                             post_StatusCode = ((OptionSetValue)postMessageImage.Attributes["statecode"]).Value.ToString();
@@ -500,15 +515,16 @@ namespace FNZAnalysis
 
                         if (postMessageImage.Attributes.Contains("red_sltmember"))
                             post_red_sltmember = ((OptionSetValue)postMessageImage.Attributes["red_sltmember"]).Value.ToString();
+                        postSltmember = postMessageImage.FormattedValues.Where(x => x.Key == "red_sltmember").Select(y => y.Value).First().ToString();
 
                         //if (postMessageImage.Attributes.Contains("red_multisolution"))
-                            //     post_red_multisolution = ((OptionSetValue)postMessageImage.Attributes["red_multisolution"]).Value.ToString();
+                        //     post_red_multisolution = ((OptionSetValue)postMessageImage.Attributes["red_multisolution"]).Value.ToString();
 
-                            if (postMessageImage.Attributes.Contains("red_includeintherevenueforecast"))
-                            {
-                                post_red_includeintherevenueforecast = ((OptionSetValue)postMessageImage.Attributes["red_includeintherevenueforecast"]).Value.ToString();
-                                postincludeinrevenue = postMessageImage.FormattedValues.Where(x => x.Key == "red_includeintherevenueforecast").Select(y => y.Value).First().ToString();
-                            }
+                        if (postMessageImage.Attributes.Contains("red_includeintherevenueforecast"))
+                        {
+                            post_red_includeintherevenueforecast = ((OptionSetValue)postMessageImage.Attributes["red_includeintherevenueforecast"]).Value.ToString();
+                            postincludeinrevenue = postMessageImage.FormattedValues.Where(x => x.Key == "red_includeintherevenueforecast").Select(y => y.Value).First().ToString();
+                        }
 
                         if (postMessageImage.Attributes.Contains("parentaccountid"))
                             post_parentaccountid = (EntityReference)postMessageImage.Attributes["parentaccountid"];
@@ -523,7 +539,11 @@ namespace FNZAnalysis
                             post_red_division = (EntityReference)postMessageImage.Attributes["red_division"];
 
                         if (postMessageImage.Attributes.Contains("modifiedby"))
-                            post_modifiedby = (EntityReference)postMessageImage.Attributes["modifiedby"];
+                          post_modifiedby = (EntityReference)postMessageImage.Attributes["modifiedby"];
+
+
+                        if (postMessageImage.Attributes.Contains("ownerid"))
+                           post_dealowner = (EntityReference)postMessageImage.Attributes["ownerid"];
 
                         if (postMessageImage.Attributes.Contains("red_regions"))
                             post_red_regions = (EntityReference)postMessageImage.Attributes["red_regions"];
@@ -537,6 +557,9 @@ namespace FNZAnalysis
                         if (postMessageImage.Attributes.Contains("name"))
                             post_name = (String)postMessageImage.Attributes["name"];
 
+                        if (postMessageImage.Attributes.Contains("red_opportunitycode"))
+                            post_uniqueid = (String)postMessageImage.Attributes["red_opportunitycode"];
+
                         if (postMessageImage.Attributes.Contains("red_ifyes"))
                             post_red_ifyes = (String)postMessageImage.Attributes["red_ifyes"];
 
@@ -549,291 +572,336 @@ namespace FNZAnalysis
                         if (postMessageImage.Attributes.Contains("estimatedclosedate"))
                             post_estimatedclosedate = postMessageImage.Attributes["estimatedclosedate"].ToString();
 
-                    }
+                        //   if (postMessageImage.Attributes.Contains("modifiedon"))
+                        Post_modifiedon = (DateTime.UtcNow).ToString();
 
-                    //update the old and new values of topic field in description field 
+                        //update the old and new values of topic field in description field 
 
-                    Entity opportunity_analysis = new Entity("red_opportunityanalysis");
-                   // var changed_values = "";
-                  
-
-                    if (pre_estimatedclosedate != null && pre_estimatedclosedate != post_estimatedclosedate)
-                    {
-                       
-                        opportunity_analysis["red_targetsigningdate"] = DateTime.Parse(post_estimatedclosedate.ToString());
-                        opportunity_analysis["red_estimatedclosedate"] = DateTime.Parse(pre_estimatedclosedate.ToString());
-                        changeValues.Add("Target Signing Date:", post_estimatedclosedate.ToString());
-                        OpportunityChanges changes = new OpportunityChanges();
-                        changes.OpportunityName = pre_name;
-                        changes.Division = post_red_division.Name;
-                        changes.ElementChanged = "Target Signing Date";
-                        changes.PreviousInput = pre_estimatedclosedate;
-                        changes.PresentInput = post_estimatedclosedate;
-
-              
-                        // ocold.Add("Target Signing Date:", pre_estimatedclosedate.ToString());
-
-                        ocold.Add("TargetSigningDate",changes);
-
-                        oc.red_targetsigningdate = 1;
-                    }
+                        Entity opportunity_analysis = new Entity("red_opportunityanalysis");
+                        // var changed_values = "";
 
 
-                   if (pre_red_includeintherevenueforecast != null && pre_red_includeintherevenueforecast != post_red_includeintherevenueforecast)
-                    {
-                        opportunity_analysis["red_includeintherevenueforecast"] = new OptionSetValue(Convert.ToInt32(pre_red_includeintherevenueforecast));
-                        opportunity_analysis["red_newincludeinrevenueforecast"] = new OptionSetValue(Convert.ToInt32(post_red_includeintherevenueforecast));
-                        changeValues.Add("Include in the Revenue Forecast :", postincludeinrevenue.ToString());
-                        OpportunityChanges revenuechanges = new OpportunityChanges();
-                        revenuechanges.OpportunityName = pre_name;
-                        revenuechanges.Division = post_red_division.Name;
-                        revenuechanges.ElementChanged = "Include in the Revenue Forecast";
-                        revenuechanges.PreviousInput = preincludeinrevenue;
-                        revenuechanges.PresentInput = postincludeinrevenue;
+                        if (pre_estimatedclosedate != null && pre_estimatedclosedate != post_estimatedclosedate)
+                        {
+
+                            opportunity_analysis["red_targetsigningdate"] = DateTime.Parse(post_estimatedclosedate.ToString());
+                            opportunity_analysis["red_estimatedclosedate"] = DateTime.Parse(pre_estimatedclosedate.ToString());
+                            changeValues.Add("Target Signing Date:", post_estimatedclosedate.ToString());
+                            OpportunityChanges changes = new OpportunityChanges();
+                            changes.SummaryDescription = pre_name;
+                            changes.opportunitycode = post_uniqueid;
+                            changes.Division = post_red_division.Name;
+                            changes.ElementChanged = "Target Signing Date";
+                            changes.PreviousInput = pre_estimatedclosedate;
+                            changes.PresentInput = post_estimatedclosedate;
+                            changes.CustomerName = pre_parentaccountid.Name;
+                           // changes.Modifiedby = post_modifiedby.Name;
+                            changes.SLTMember = postSltmember;
+                            changes.Modifiedon = Post_modifiedon;
+                          //  changes.DealOwner = post_dealowner.Name;
 
 
-                        // ocold.Add("Target Signing Date:", pre_estimatedclosedate.ToString());
 
-                        ocold.Add("IncludeintheRevenueForecast",revenuechanges);
-                       // unchangeValues.Add("Include in the Revenue Forecast :", preincludeinrevenue.ToString());
-                        oc.red_includeinrevenueforecast = 1;
-                        
-                    }
+                            // ocold.Add("Target Signing Date:", pre_estimatedclosedate.ToString());
+
+                            ocold.Add("TargetSigningDate", changes);
+
+                            oc.red_targetsigningdate = 1;
+                        }
 
 
-                    //if (pre_red__asset_value != null)
-                    
-                        
-                    
-                    if (pre_red__asset_value != null && pre_red__asset_value != post_red__Asset_value)
-                    {
-                        opportunity_analysis["red_asset_value"] = new Money(Decimal.Parse(pre_red__asset_value.ToString()));
-                        opportunity_analysis["red_new_aua"] = new Money(Decimal.Parse(post_red__Asset_value.ToString()));
-                        changeValues.Add("AUA (billion) :", post_red__Asset_value.ToString());
+                        if (pre_red_includeintherevenueforecast != null && pre_red_includeintherevenueforecast != post_red_includeintherevenueforecast)
+                        {
+                            opportunity_analysis["red_includeintherevenueforecast"] = new OptionSetValue(Convert.ToInt32(pre_red_includeintherevenueforecast));
+                            opportunity_analysis["red_newincludeinrevenueforecast"] = new OptionSetValue(Convert.ToInt32(post_red_includeintherevenueforecast));
+                            changeValues.Add("2022 Commitment:", postincludeinrevenue.ToString());
+                            OpportunityChanges revenuechanges = new OpportunityChanges();
+                            revenuechanges.SummaryDescription = pre_name;
+                            revenuechanges.opportunitycode = post_uniqueid;
+                            revenuechanges.Division = post_red_division.Name;
+                            revenuechanges.ElementChanged = "2022 Commitment";
+                            revenuechanges.PreviousInput = preincludeinrevenue;
+                            revenuechanges.PresentInput = postincludeinrevenue;
+                            revenuechanges.CustomerName = pre_parentaccountid.Name;
+//      revenuechanges.Modifiedby = post_modifiedby.Name;
+                            revenuechanges.SLTMember = postSltmember;
+                            revenuechanges.Modifiedon = Post_modifiedon;
+                         //  revenuechanges.DealOwner = post_dealowner.Name;
 
-                        OpportunityChanges AUAchanges = new OpportunityChanges();
-                        AUAchanges.OpportunityName = pre_name;
-                        AUAchanges.Division = post_red_division.Name;
-                        AUAchanges.ElementChanged = "AUA (billion)";
-                        AUAchanges.PreviousInput = pre_red__asset_value;
-                        AUAchanges.PresentInput = post_red__Asset_value;
 
-                                              
+                            // ocold.Add("Target Signing Date:", pre_estimatedclosedate.ToString());
 
-                        ocold.Add("AUA",AUAchanges);
+                            ocold.Add("2022 Commitment", revenuechanges);
+                            // unchangeValues.Add("Include in the Revenue Forecast :", preincludeinrevenue.ToString());
+                            oc.red_includeinrevenueforecast = 1;
 
-                        //unchangeValues.Add("AUA (billion) :", pre_red__asset_value.ToString());
-                        oc.red_aua = 1;
-                        
-                    }
-                    if (pre_red__bps_cal != null && pre_red__bps_cal != post_red__bps_cal)
-                    {
-                        opportunity_analysis["red_bps_cal"] = new Money(Decimal.Parse(pre_red__bps_cal.ToString()));
-                        opportunity_analysis["red_new_bps_cal"] = new Money(Decimal.Parse(post_red__bps_cal.ToString()));
-                    }
+                        }
+
+
+                        //if (pre_red__asset_value != null)
+
+
+
+                        if (pre_red__asset_value != null && pre_red__asset_value != post_red__Asset_value)
+                        {
+                            opportunity_analysis["red_asset_value"] = new Money(Decimal.Parse(pre_red__asset_value.ToString()));
+                            opportunity_analysis["red_new_aua"] = new Money(Decimal.Parse(post_red__Asset_value.ToString()));
+                            changeValues.Add("AUA (billion) :", post_red__Asset_value.ToString());
+
+                            OpportunityChanges AUAchanges = new OpportunityChanges();
+                            AUAchanges.SummaryDescription = pre_name;
+                            AUAchanges.opportunitycode = post_uniqueid;
+                            AUAchanges.Division = post_red_division.Name;
+                            AUAchanges.ElementChanged = "AUA (billion)";
+                            AUAchanges.PreviousInput = pre_red__asset_value;
+                            AUAchanges.PresentInput = post_red__Asset_value;
+                            AUAchanges.CustomerName = pre_parentaccountid.Name;
+                           // AUAchanges.Modifiedby = post_modifiedby.Name;
+                            AUAchanges.SLTMember = postSltmember;
+                            AUAchanges.Modifiedon = Post_modifiedon;
+                        //   AUAchanges.DealOwner = post_dealowner.Name;
+
+
+                            ocold.Add("AUA", AUAchanges);
+
+                            //unchangeValues.Add("AUA (billion) :", pre_red__asset_value.ToString());
+                            oc.red_aua = 1;
+
+                        }
+                        if (pre_red__bps_cal != null && pre_red__bps_cal != post_red__bps_cal)
+                        {
+                            opportunity_analysis["red_bps_cal"] = new Money(Decimal.Parse(pre_red__bps_cal.ToString()));
+                            opportunity_analysis["red_new_bps_cal"] = new Money(Decimal.Parse(post_red__bps_cal.ToString()));
+                        }
                         //opportunity_analysis["red_new_bps_cal_base"] = new Money(Decimal.Parse(post_red__bps_cal_base.ToString())); }
 
-                  /*  if (pre_red__asset_value_Base != null && pre_red__asset_value_Base != post_red__asset_value_Base)
-                     {
-                         opportunity_analysis["red_asset_value_base"] = new Money(Decimal.Parse(pre_red__asset_value_Base.ToString()));
+                        /*  if (pre_red__asset_value_Base != null && pre_red__asset_value_Base != post_red__asset_value_Base)
+                           {
+                               opportunity_analysis["red_asset_value_base"] = new Money(Decimal.Parse(pre_red__asset_value_Base.ToString()));
 
-                        opportunity_analysis["red_new_aua_base"] = new Money(Decimal.Parse(post_red__asset_value_Base.ToString()));
-                    }*/
-                    if (pre_modifiedby != null && pre_modifiedby != post_modifiedby)
-                    {
-                        opportunity_analysis["modifiedby"] = pre_modifiedby;
-                        opportunity_analysis["red_newdealowner"] = post_modifiedby;
-                    }
+                              opportunity_analysis["red_new_aua_base"] = new Money(Decimal.Parse(post_red__asset_value_Base.ToString()));
+                          }*/
+                    /*    if (pre_modifiedby != null && pre_modifiedby != post_modifiedby)
+                        {
+                            opportunity_analysis["modifiedby"] = pre_modifiedby;
+                            opportunity_analysis["red_newdealowner"] = post_modifiedby;
+                        }*/
 
-                    if (pre_StatusCode != null && pre_StatusCode != post_StatusCode)
-                    {
-                        opportunity_analysis["red_status"] = new OptionSetValue(Convert.ToInt32(pre_StatusCode.ToString()));
-                        opportunity_analysis["red_newstatus"] = new OptionSetValue(Convert.ToInt32(post_StatusCode.ToString()));
-                    }
+                        if (pre_StatusCode != null && pre_StatusCode != post_StatusCode)
+                        {
+                            opportunity_analysis["red_status"] = new OptionSetValue(Convert.ToInt32(pre_StatusCode.ToString()));
+                            opportunity_analysis["red_newstatus"] = new OptionSetValue(Convert.ToInt32(post_StatusCode.ToString()));
+                        }
 
 
-                    if (pre_statusreason != null && pre_statusreason != post_statusreason)
-                    {
-                        opportunity_analysis["red_statusreason"] = new OptionSetValue(Convert.ToInt32(pre_statusreason.ToString()));
-                        opportunity_analysis["red_newstatusreason"] = new OptionSetValue(Convert.ToInt32(post_statusreason.ToString()));
-                    }
-                    if (pre_opportunityratingcode != null && pre_opportunityratingcode != post_opportunityratingcode)
-                    {
-                        opportunity_analysis["red_prioritymatrix"] = new OptionSetValue(Convert.ToInt32(pre_opportunityratingcode));
-                        opportunity_analysis["red_newprioritymatrix"] = new OptionSetValue(Convert.ToInt32(post_opportunityratingcode));
+                        if (pre_statusreason != null && pre_statusreason != post_statusreason)
+                        {
+                            opportunity_analysis["red_statusreason"] = new OptionSetValue(Convert.ToInt32(pre_statusreason.ToString()));
+                            opportunity_analysis["red_newstatusreason"] = new OptionSetValue(Convert.ToInt32(post_statusreason.ToString()));
+                        }
+                        if (pre_opportunityratingcode != null && pre_opportunityratingcode != post_opportunityratingcode)
+                        {
+                            opportunity_analysis["red_prioritymatrix"] = new OptionSetValue(Convert.ToInt32(pre_opportunityratingcode.ToString()));
+                            opportunity_analysis["red_newprioritymatrix"] = new OptionSetValue(Convert.ToInt32(post_opportunityratingcode.ToString()));
+                          
 
-                        changeValues.Add("Priority as per Sales Prioritisation Matrix :", post_opportunityratingcode);
+                            changeValues.Add("Priority:", post_opportunityratingcode);
 
-                        OpportunityChanges prioritychanges = new OpportunityChanges();
-                        prioritychanges.OpportunityName = pre_name;
-                        prioritychanges.Division = post_red_division.Name;
-                        prioritychanges.ElementChanged = "Priority as per Sales Prioritisation Matrix";
-                        prioritychanges.PreviousInput = pre_opportunityratingcode;
-                        prioritychanges.PresentInput = post_opportunityratingcode;
+                            OpportunityChanges prioritychanges = new OpportunityChanges();
+                            prioritychanges.SummaryDescription = pre_name;
+                            prioritychanges.opportunitycode = post_uniqueid;
+                            prioritychanges.Division = post_red_division.Name;
+                            prioritychanges.ElementChanged = "Priority";
+                            prioritychanges.PreviousInput = preopportunitycode;
+                            prioritychanges.PresentInput = postopportunitycode;
+                            prioritychanges.CustomerName = pre_parentaccountid.Name;
+                           // prioritychanges.Modifiedby = post_modifiedby.Name;
+                            prioritychanges.SLTMember = postSltmember;
+                            prioritychanges.Modifiedon = Post_modifiedon;
+                         //   prioritychanges.DealOwner = post_dealowner.Name;
 
-                        ocold.Add("Priority as per Sales Prioritisation Matrix", prioritychanges);
-                        oc.red_priorityaspersalesprioritisationmatrix = 1; 
 
-                    }
-                    if (pre_red__consultancy_fee_base != null && pre_red__consultancy_fee_base != post_red__consultancy_fee_base)
-                    {
-                        opportunity_analysis["red_consultancy_fee_base"] = new Money(Decimal.Parse(pre_red__consultancy_fee_base.ToString()));
-                        opportunity_analysis["red_newconsultancy_fee_base"] = new Money(Decimal.Parse(post_red__consultancy_fee_base.ToString()));
-                    }
-                    if (pre_red__consultancy_fee != null && pre_red__consultancy_fee != post_red__consultancy_fee)
-                    {
-                        opportunity_analysis["red_consultancy_fee"] = new Money(Decimal.Parse(pre_red__consultancy_fee.ToString()));
-                       opportunity_analysis["red_newconsultancy_fee"] = new Money(Decimal.Parse(post_red__consultancy_fee.ToString()));
-                        changeValues.Add("Total Scoping/Consultancy Fee (million) :", post_red__consultancy_fee.ToString());
 
-                        OpportunityChanges scopechanges = new OpportunityChanges();
-                        scopechanges.OpportunityName = pre_name;
-                        scopechanges.Division = post_red_division.Name;
-                        scopechanges.ElementChanged = "Total Scoping/Consultancy Fee (million)";
-                        scopechanges.PreviousInput = pre_red__consultancy_fee;
-                        scopechanges.PresentInput = post_red__consultancy_fee;
+                            ocold.Add("Priority", prioritychanges);
+                            oc.red_priorityaspersalesprioritisationmatrix = 1;
 
-                        ocold.Add("TotalScoping",scopechanges);
-                       // unchangeValues.Add("Total Scoping/Consultancy Fee (million) :", pre_red__consultancy_fee.ToString());
-                        oc.red_totalscopingconsultancyfeemillion = 1;
+                        }
+                        if (pre_red__consultancy_fee_base != null && pre_red__consultancy_fee_base != post_red__consultancy_fee_base)
+                        {
+                            opportunity_analysis["red_consultancy_fee_base"] = new Money(Decimal.Parse(pre_red__consultancy_fee_base.ToString()));
+                            opportunity_analysis["red_newconsultancy_fee_base"] = new Money(Decimal.Parse(post_red__consultancy_fee_base.ToString()));
+                        }
+                        if (pre_red__consultancy_fee != null && pre_red__consultancy_fee != post_red__consultancy_fee)
+                        {
+                            opportunity_analysis["red_consultancy_fee"] = new Money(Decimal.Parse(pre_red__consultancy_fee.ToString()));
+                            opportunity_analysis["red_newconsultancy_fee"] = new Money(Decimal.Parse(post_red__consultancy_fee.ToString()));
+                            changeValues.Add("Total Scoping/Consultancy Fee (million) :", post_red__consultancy_fee.ToString());
 
-                    }
-                     
-                    if (pre_red_deliveryfees != null && pre_red_deliveryfees != post_red_deliveryfees)
-                    {
-                        opportunity_analysis["red_deliveryfees"] = new Money(Decimal.Parse(pre_red_deliveryfees.ToString()));
-                      // opportunity_analysis["red_new_deliveryfees"] = new Money(Decimal.Parse(post_red_deliveryfees.ToString()));
-                    }
-                   /* if (pre_red_implamentationfee_base != null && pre_red_implamentationfee_base != post_red_implamentationfee_base)
-                    {
-                        opportunity_analysis["red_implamentationfee_base"] = new Money(Decimal.Parse(pre_red_implamentationfee_base.ToString()));
-                        opportunity_analysis["red_newimplamentationfee_base"] = new Money(Decimal.Parse(post_red_implamentationfee_base.ToString()));
-                    }*/
+                            OpportunityChanges scopechanges = new OpportunityChanges();
+                            scopechanges.SummaryDescription = pre_name;
+                            scopechanges.Division = post_red_division.Name;
+                            scopechanges.opportunitycode = post_uniqueid;
+                            scopechanges.ElementChanged = "Total Scoping/Consultancy Fee (million)";
+                            scopechanges.PreviousInput = pre_red__consultancy_fee;
+                            scopechanges.PresentInput = post_red__consultancy_fee;
+                            scopechanges.CustomerName = pre_parentaccountid.Name;
+                            //scopechanges.Modifiedby = post_modifiedby.Name;
+                            scopechanges.SLTMember = postSltmember;
+                            scopechanges.Modifiedon = Post_modifiedon;
+                           // scopechanges.DealOwner = post_dealowner.Name;
+
+                            ocold.Add("TotalScoping", scopechanges);
+                            // unchangeValues.Add("Total Scoping/Consultancy Fee (million) :", pre_red__consultancy_fee.ToString());
+                            oc.red_totalscopingconsultancyfeemillion = 1;
+
+                        }
+
+                        if (pre_red_deliveryfees != null && pre_red_deliveryfees != post_red_deliveryfees)
+                        {
+                            opportunity_analysis["red_deliveryfees"] = new Money(Decimal.Parse(pre_red_deliveryfees.ToString()));
+                            // opportunity_analysis["red_new_deliveryfees"] = new Money(Decimal.Parse(post_red_deliveryfees.ToString()));
+                        }
+                        /* if (pre_red_implamentationfee_base != null && pre_red_implamentationfee_base != post_red_implamentationfee_base)
+                         {
+                             opportunity_analysis["red_implamentationfee_base"] = new Money(Decimal.Parse(pre_red_implamentationfee_base.ToString()));
+                             opportunity_analysis["red_newimplamentationfee_base"] = new Money(Decimal.Parse(post_red_implamentationfee_base.ToString()));
+                         }*/
 
                         if (pre_red_implamentationfee != null && pre_red_implamentationfee != post_red_implamentationfee)
-                    {
-                        opportunity_analysis["red_implamentationfee"] = new Money(Decimal.Parse(pre_red_implamentationfee.ToString()));
-                       opportunity_analysis["red_newimplamentationfee"] = new Money(Decimal.Parse(post_red_implamentationfee.ToString()));
-                        changeValues.Add("Total D&E Fee :", post_red_implamentationfee.ToString());
+                        {
+                            opportunity_analysis["red_implamentationfee"] = new Money(Decimal.Parse(pre_red_implamentationfee.ToString()));
+                            opportunity_analysis["red_newimplamentationfee"] = new Money(Decimal.Parse(post_red_implamentationfee.ToString()));
+                            changeValues.Add("Total D&E Fee :", post_red_implamentationfee.ToString());
 
-                        OpportunityChanges DEchanges = new OpportunityChanges();
-                        DEchanges.OpportunityName = pre_name;
-                        DEchanges.Division = post_red_division.Name;
-                        DEchanges.ElementChanged = "Total D&E Fee :";
-                        DEchanges.PreviousInput = pre_red_implamentationfee;
-                        DEchanges.PresentInput = post_red_implamentationfee;
+                            OpportunityChanges DEchanges = new OpportunityChanges();
+                            DEchanges.SummaryDescription = pre_name;
+                            DEchanges.Division = post_red_division.Name;
+                            DEchanges.ElementChanged = "Total D&E Fee :";
+                            DEchanges.PreviousInput = pre_red_implamentationfee;
+                            DEchanges.PresentInput = post_red_implamentationfee;
+                            DEchanges.CustomerName = pre_parentaccountid.Name;
+                          // DEchanges.Modifiedby = post_modifiedby.Name;
+                            DEchanges.SLTMember = postSltmember;
+                            DEchanges.Modifiedon = Post_modifiedon;
+                         //  DEchanges.DealOwner = post_dealowner.Name;
 
-                        ocold.Add("TotalDandE",DEchanges);
+                            ocold.Add("TotalDandE", DEchanges);
 
-                        // unchangeValues.Add("Total D&E Fee :", pre_red_implamentationfee.ToString());
-                        oc.red_totaldefeemillion = 1;
-                       
-                    }
-                  /*  if (pre_red_implamentationfee_base != null && pre_red_implamentationfee != post_red_implamentationfee)
-                    {
-                        opportunity_analysis["red_implamentationfee"] = new Money(Decimal.Parse(pre_red_implamentationfee.ToString()));
-                        opportunity_analysis["red_newimplamentationfee"] = new Money(Decimal.Parse(post_red_implamentationfee.ToString()));
-                        changeValues.Add("Total D&E Fee :", post_red_implamentationfee.ToString());
+                            // unchangeValues.Add("Total D&E Fee :", pre_red_implamentationfee.ToString());
+                            oc.red_totaldefeemillion = 1;
 
-                        OpportunityChanges DEchanges = new OpportunityChanges();
-                        DEchanges.OpportunityName = pre_name;
-                        DEchanges.Division = post_red_division.Name;
-                        DEchanges.ElementChanged = "Total D&E Fee :";
-                        DEchanges.PreviousInput = pre_red_implamentationfee;
-                        DEchanges.PresentInput = post_red_implamentationfee;
+                        }
+                        /*  if (pre_red_implamentationfee_base != null && pre_red_implamentationfee != post_red_implamentationfee)
+                          {
+                              opportunity_analysis["red_implamentationfee"] = new Money(Decimal.Parse(pre_red_implamentationfee.ToString()));
+                              opportunity_analysis["red_newimplamentationfee"] = new Money(Decimal.Parse(post_red_implamentationfee.ToString()));
+                              changeValues.Add("Total D&E Fee :", post_red_implamentationfee.ToString());
 
-                        ocold.Add("TotalDandE", DEchanges);
+                              OpportunityChanges DEchanges = new OpportunityChanges();
+                              DEchanges.OpportunityName = pre_name;
+                              DEchanges.Division = post_red_division.Name;
+                              DEchanges.ElementChanged = "Total D&E Fee :";
+                              DEchanges.PreviousInput = pre_red_implamentationfee;
+                              DEchanges.PresentInput = post_red_implamentationfee;
 
-                        // unchangeValues.Add("Total D&E Fee :", pre_red_implamentationfee.ToString());
-                        oc.red_totaldefeemillion = 1;
+                              ocold.Add("TotalDandE", DEchanges);
 
-                    } */
+                              // unchangeValues.Add("Total D&E Fee :", pre_red_implamentationfee.ToString());
+                              oc.red_totaldefeemillion = 1;
 
-
-                    /* if (pre_red__bps_cal != null )
-                     opportunity_analysis["red_bps_cal"] = new Money(Decimal.Parse(pre_red__bps_cal.ToString()));
-                     if (pre_red__bps_cal != null && pre_red__bps_cal != post_red__bps_cal)
-                         changed_values += " , " + pre_red__bps_cal;
-                     if (pre_red__bps_cal_base != null)
-                         opportunity_analysis["red_bps_cal_base"] = new Money(Decimal.Parse(pre_red__bps_cal_base.ToString()));
-                     if (pre_red__bps_cal_base != null && pre_red__bps_cal_base != post_red__bps_cal_base)
-                         changed_values += " , " + pre_red__bps_cal_base;
+                          } */
 
 
-
-                     if (pre_red_deliveryfees != null )
-                     {
-                         opportunity_analysis["red_deliveryfees"] = new Money(Decimal.Parse(pre_red_deliveryfees.ToString()));
-                     }
-
-                     #/                    if (pre_red_deliveryfees != null && pre_red_deliveryfees != post_red_deliveryfees)
-                     if (pre_red_deliveryfees != null && pre_red_deliveryfees != post_red_deliveryfees)
-                         changed_values += " , " + pre_red_deliveryfees;
-
-
-                     if (pre_red_deliveryfees_Base != null)
-                     {
-                         opportunity_analysis["red_deliveryfees_base"] = new Money(Decimal.Parse(pre_red_deliveryfees_Base.ToString()));
-                     }
-                     if (pre_red_deliveryfees_Base != null && pre_red_deliveryfees_Base != post_red_deliveryfees_Base)
-                         changed_values += " , " + pre_red_deliveryfees_Base;
+                        /* if (pre_red__bps_cal != null )
+                         opportunity_analysis["red_bps_cal"] = new Money(Decimal.Parse(pre_red__bps_cal.ToString()));
+                         if (pre_red__bps_cal != null && pre_red__bps_cal != post_red__bps_cal)
+                             changed_values += " , " + pre_red__bps_cal;
+                         if (pre_red__bps_cal_base != null)
+                             opportunity_analysis["red_bps_cal_base"] = new Money(Decimal.Parse(pre_red__bps_cal_base.ToString()));
+                         if (pre_red__bps_cal_base != null && pre_red__bps_cal_base != post_red__bps_cal_base)
+                             changed_values += " , " + pre_red__bps_cal_base;
 
 
-                     if (pre_red__basepoint != null)
-                     {
-                         opportunity_analysis["red_basepoint"] = Decimal.Parse(pre_red__basepoint.ToString());
 
-                     }
-                     */
+                         if (pre_red_deliveryfees != null )
+                         {
+                             opportunity_analysis["red_deliveryfees"] = new Money(Decimal.Parse(pre_red_deliveryfees.ToString()));
+                         }
 
-                    if (pre_red__basepoint != null && pre_red__basepoint != post_red__basepoint)
-                    {
-                        opportunity_analysis["red_newbasepoint"] = Decimal.Parse(post_red__basepoint.ToString());
-                        opportunity_analysis["red_basepoint"] = Decimal.Parse(pre_red__basepoint.ToString());
-                        changeValues.Add("Average Basis Point :", post_red__basepoint.ToString());
-                        OpportunityChanges ABPchanges = new OpportunityChanges();
-                        ABPchanges.OpportunityName = pre_name;
-                        ABPchanges.Division = post_red_division.Name;
-                        ABPchanges.ElementChanged = "Average Basis Point";
-                        ABPchanges.PreviousInput = pre_red__basepoint;
-                        ABPchanges.PresentInput = post_red__basepoint;
+                         #/                    if (pre_red_deliveryfees != null && pre_red_deliveryfees != post_red_deliveryfees)
+                         if (pre_red_deliveryfees != null && pre_red_deliveryfees != post_red_deliveryfees)
+                             changed_values += " , " + pre_red_deliveryfees;
 
-                        ocold.Add("AverageBasisPoint",ABPchanges);
-                       // unchangeValues.Add("Average Basis Point :", pre_red__basepoint.ToString());
-                        oc.red_averagebasispoint = 1;
-                        
-                    }
+
+                         if (pre_red_deliveryfees_Base != null)
+                         {
+                             opportunity_analysis["red_deliveryfees_base"] = new Money(Decimal.Parse(pre_red_deliveryfees_Base.ToString()));
+                         }
+                         if (pre_red_deliveryfees_Base != null && pre_red_deliveryfees_Base != post_red_deliveryfees_Base)
+                             changed_values += " , " + pre_red_deliveryfees_Base;
+
+
+                         if (pre_red__basepoint != null)
+                         {
+                             opportunity_analysis["red_basepoint"] = Decimal.Parse(pre_red__basepoint.ToString());
+
+                         }
+                         */
+
+                        if (pre_red__basepoint != null && pre_red__basepoint != post_red__basepoint)
+                        {
+                            opportunity_analysis["red_newbasepoint"] = Decimal.Parse(post_red__basepoint.ToString());
+                            opportunity_analysis["red_basepoint"] = Decimal.Parse(pre_red__basepoint.ToString());
+                            changeValues.Add("Average Basis Point :", post_red__basepoint.ToString());
+                            OpportunityChanges ABPchanges = new OpportunityChanges();
+                            ABPchanges.SummaryDescription = pre_name;
+                            ABPchanges.opportunitycode = post_uniqueid;
+                            ABPchanges.Division = post_red_division.Name;
+                            ABPchanges.ElementChanged = "Average Basis Point";
+                            ABPchanges.PreviousInput = pre_red__basepoint;
+                            ABPchanges.PresentInput = post_red__basepoint;
+                            ABPchanges.CustomerName = pre_parentaccountid.Name;
+                          // ABPchanges.Modifiedby = post_modifiedby.Name;
+                            ABPchanges.SLTMember = postSltmember;
+                            ABPchanges.Modifiedon = Post_modifiedon;
+                         //  ABPchanges.DealOwner = post_dealowner.Name;
+
+                            ocold.Add("AverageBasisPoint", ABPchanges);
+                            // unchangeValues.Add("Average Basis Point :", pre_red__basepoint.ToString());
+                            oc.red_averagebasispoint = 1;
+
+                        }
 
 
                         if (pre_exchangerate != null)
                         {
                             opportunity_analysis["exchangerate"] = pre_exchangerate;
                         }
-                        if (pre_parentaccountid != null )
+                        if (pre_parentaccountid != null)
                         {
                             opportunity_analysis["red_parentaccountid"] = pre_parentaccountid;
 
                         }
 
-                        if (pre_parentcontactid != null )
+                        if (pre_parentcontactid != null)
                         {
                             opportunity_analysis["red_parentcontactid"] = pre_parentcontactid;
 
                         }
 
-                        if (pre_transactioncurrencyid != null )
+                        if (pre_transactioncurrencyid != null)
                         {
                             opportunity_analysis["transactioncurrencyid"] = pre_transactioncurrencyid;
 
 
                         }
-                        if (pre_red_territory != null )
+                        if (pre_red_territory != null)
                         {
                             opportunity_analysis["red_territory"] = pre_red_territory;
 
                         }
 
-                        if (pre_red_division != null )
+                        if (pre_red_division != null)
                         {
                             opportunity_analysis["red_division"] = pre_red_division;
 
@@ -841,14 +909,14 @@ namespace FNZAnalysis
 
                         }
 
-                        if (pre_red_regions != null )
+                        if (pre_red_regions != null)
                         {
                             opportunity_analysis["red_regions"] = pre_red_regions;
 
 
                         }
 
-                        if (pre_originatingleadid != null )
+                        if (pre_originatingleadid != null)
                         {
                             opportunity_analysis["red_originatingleadid"] = pre_originatingleadid;
 
@@ -857,156 +925,170 @@ namespace FNZAnalysis
 
 
 
-                        if (pre_red_opptype != null )
+                        if (pre_red_opptype != null)
                         {
                             opportunity_analysis["red_opptype"] = new OptionSetValue(Convert.ToInt32(pre_red_opptype));
 
                         }
 
 
-                    //    if (pre_red_multisolution != null)
-                      //  if (pre_red_multisolution != null)
-                        
-                      //      opportunity_analysis["red_multisolution"] = new OptionSetValue(Convert.ToInt32(pre_red_multisolution));
+                        //    if (pre_red_multisolution != null)
+                        //  if (pre_red_multisolution != null)
 
-                        
+                        //      opportunity_analysis["red_multisolution"] = new OptionSetValue(Convert.ToInt32(pre_red_multisolution));
+
+
 
                         if (pre_red_probability != null)
                         {
                             opportunity_analysis["red_probability"] = new OptionSetValue(Convert.ToInt32(pre_red_probability));
                         }
 
-                       if (pre_red_primarysolution != null && pre_red_primarysolution != post_red_primarysolution)
-                    {
-                   
-                        opportunity_analysis["red_primarysolution"] = pre_red_primarysolution;
-                        opportunity_analysis["red_newprimarysolution"] = post_red_primarysolution;
-                    }
-
-
-                    if (pre_red_probability != null && pre_red_probability != post_red_probability)
+                        if (pre_red_primarysolution != null && pre_red_primarysolution != post_red_primarysolution)
                         {
-                        opportunity_analysis["red_probability"] = new OptionSetValue(Convert.ToInt32(pre_red_probability.ToString()));
-                        opportunity_analysis["red_newprobability"] = new OptionSetValue(Convert.ToInt32(post_red_probability.ToString()));
 
-                        changeValues.Add("Probability :", postProbabilityValue.ToString());
-                        OpportunityChanges prochanges = new OpportunityChanges();
-                        prochanges.OpportunityName = pre_name;
-                        prochanges.Division = post_red_division.Name;
-                        prochanges.ElementChanged = "Probability";
-                        prochanges.PreviousInput = preProbabilityValue;
-                        prochanges.PresentInput = postProbabilityValue;
-
-                        ocold.Add("Probability",prochanges);
-
-                     //   unchangeValues.Add("Probability :", preProbabilityValue.ToString());xws
-                        oc.red_probability = 1;
-                        
-                    }
-                        
-                    if (pre_red_regulatorypermissions != null)
-                    {
-                        opportunity_analysis["red_regulatorypermissions"] = new OptionSetValue(Convert.ToInt32(pre_red_regulatorypermissions));
-                    }
-
-                     if (pre_red_stage != null && pre_red_stage != post_red_stage)
-                    {
-                        if (Convert.ToInt32(post_red_stage) == 283390005 || Convert.ToInt32(post_red_stage) == 283390007)
-                        {
-                            opportunity_analysis["red_newstage"] = new OptionSetValue(Convert.ToInt32(post_red_stage));
-                            opportunity_analysis["red_stage"] = new OptionSetValue(Convert.ToInt32(pre_red_stage));
-                            changeValues.Add("Stage:", postStageValue);
-                            OpportunityChanges stagechanges = new OpportunityChanges();
-                            stagechanges.OpportunityName = pre_name;
-                            stagechanges.Division = post_red_division.Name;
-                            stagechanges.ElementChanged = "Stage";
-                            stagechanges.PreviousInput = preStageValue;
-                            stagechanges.PresentInput = postStageValue;
-                                   
-                            ocold.Add("Stage",stagechanges);
-
-                            //unchangeValues.Add("Probability :", preStageValue.ToString());
-                            oc.red_stage = 1;
-                            
+                            opportunity_analysis["red_primarysolution"] = pre_red_primarysolution;
+                            opportunity_analysis["red_newprimarysolution"] = post_red_primarysolution;
                         }
-                        
-                    }
-                    if (pre_red_sltmember != null)
-                    opportunity_analysis["red_sltmember"] = new OptionSetValue(Convert.ToInt32(pre_red_sltmember));                    
-                    if (pre_name != null )
-                     opportunity_analysis["red_name"] = pre_name;                
-
-                    if (pre_red_ifyes != null )                    
-                      opportunity_analysis["red_ifyes"] = pre_red_ifyes;
-                    if (pre_description != null)
-                     opportunity_analysis["red_description"] = pre_description;                                       
-
-                   if (pre_red_basispointrange != null)                    
-                        opportunity_analysis["red_basispointrange"] = pre_red_basispointrange;
-                    
-                   /*    var ExistingOppAnalystByOppId = service.Retrieve("")
 
 
+                        if (pre_red_probability != null && pre_red_probability != post_red_probability)
+                        {
+                            opportunity_analysis["red_probability"] = new OptionSetValue(Convert.ToInt32(pre_red_probability.ToString()));
+                            opportunity_analysis["red_newprobability"] = new OptionSetValue(Convert.ToInt32(post_red_probability.ToString()));
+
+                            changeValues.Add("Probability :", postProbabilityValue.ToString());
+                            OpportunityChanges prochanges = new OpportunityChanges();
+                            prochanges.SummaryDescription = pre_name;
+                            prochanges.opportunitycode = post_uniqueid;
+                            prochanges.Division = post_red_division.Name;
+                            prochanges.ElementChanged = "Probability";
+                            prochanges.PreviousInput = preProbabilityValue;
+                            prochanges.PresentInput = postProbabilityValue;
+                            prochanges.CustomerName = pre_parentaccountid.Name;
+                        //  prochanges.Modifiedby = post_modifiedby.Name;
+                            prochanges.SLTMember = postSltmember;
+                            prochanges.Modifiedon = Post_modifiedon;
+                        //   prochanges.DealOwner = post_dealowner.Name;
 
 
-                     if (changed_values != " " || changed_values != null)
-                       {
-                           if (post_estimatedclosedate != null)
 
-                           if (post_red_includeintherevenueforecast != null)
+                            ocold.Add("Probability", prochanges);
 
-                           if (post_red__Asset_value != null)
+                            //   unchangeValues.Add("Probability :", preProbabilityValue.ToString());xws
+                            oc.red_probability = 1;
 
-                           if (post_red__basepoint != null)
-                               opportunity_analysis["red_new_bps_cal_base"] = new Money(Decimal.Parse(post_red__bps_cal_base.ToString()));
-                         //  if (post_red_primarysolution opportunity_analysis["red_new_bps_cal_base"] = new Money(Decimal.Parse(post_red__bps_cal_base.ToString())); != null)
-                           
-                           if (post_red__bps_cal != null)
-                               opportunity_analysis["red_new_bps_cal"] = new Money(Decimal.Parse(post_red__bps_cal.ToString()));
-                     opportunity_analysis["red_new_bps_cal_base"] = new Money(Decimal.Parse(post_red__bps_cal_base.ToString()));
-    opportunity_analysis["red_new_bps_cal_base"] = new Money(Decimal.Parse(post_red__bps_cal_base.ToString()));
-                           if (post_red__bps_cal_base != null)
-                               opportunity_analysis["red_new_bps_cal_base"] = new Money(Decimal.Parse(post_red__bps_cal_base.ToString()));
+                        }
 
-    opportunity_analysis["red_new_bps_cal_base"] = new Money(Decimal.Parse(post_red__bps_cal_base.ToString()));
-                           if (post_red_deliveryfees != null)
-                               
-                           if (post_red_deliveryfees_Base != null)
-                               opportunity_analysis["red_new_deliveryfees_base"] = new Money(Decimal.Parse(post_red_deliveryfees_Base.ToString()));
-                          // if (post_red_multisolution != null)
-                            //   opportunity_analysis["red_new_multisolution"] = new OptionSetValue(Convert.ToInt32(post_red_multisolution.ToString()));
-                           if (post_red_probability != null)
+                        if (pre_red_regulatorypermissions != null)
+                        {
+                            opportunity_analysis["red_regulatorypermissions"] = new OptionSetValue(Convert.ToInt32(pre_red_regulatorypermissions));
+                        }
+
+                        if (pre_red_stage != null && pre_red_stage != post_red_stage)
+                        {
+                            if (Convert.ToInt32(post_red_stage) == 283390005 || Convert.ToInt32(post_red_stage) == 283390007)
+                            {
+                                opportunity_analysis["red_newstage"] = new OptionSetValue(Convert.ToInt32(post_red_stage));
+                                opportunity_analysis["red_stage"] = new OptionSetValue(Convert.ToInt32(pre_red_stage));
+                                changeValues.Add("Stage:", postStageValue);
+                                OpportunityChanges stagechanges = new OpportunityChanges();
+                                stagechanges.SummaryDescription = pre_name;
+                                stagechanges.opportunitycode = post_uniqueid;
+                                stagechanges.Division = post_red_division.Name;
+                                stagechanges.ElementChanged = "Stage";
+                                stagechanges.PreviousInput = preStageValue;
+                                stagechanges.PresentInput = postStageValue;
+                                stagechanges.CustomerName = pre_parentaccountid.Name;
+                            //    stagechanges.Modifiedby = post_modifiedby.Name;
+                                stagechanges.SLTMember = postSltmember;
+                                stagechanges.Modifiedon = Post_modifiedon;
+                             //  stagechanges.DealOwner = post_dealowner.Name;
+
+                                ocold.Add("Stage", stagechanges);
+
+                                //unchangeValues.Add("Probability :", preStageValue.ToString());
+                                oc.red_stage = 1;
+                            }
 
 
-                           if (post_red_implamentationfee != null)
-                             
+                        }
+                        if (pre_red_sltmember != null)
+                            opportunity_analysis["red_sltmember"] = new OptionSetValue(Convert.ToInt32(pre_red_sltmember));
+                        if (pre_name != null)
+                            opportunity_analysis["red_name"] = pre_name;
+
+                        if (pre_red_ifyes != null)
+                            opportunity_analysis["red_ifyes"] = pre_red_ifyes;
+                        if (pre_description != null)
+                            opportunity_analysis["red_description"] = pre_description;
+
+                        if (pre_red_basispointrange != null)
+                            opportunity_analysis["red_basispointrange"] = pre_red_basispointrange;
+
+                        /*    var ExistingOppAnalystByOppId = service.Retrieve("")
 
 
-                           if (pre_estimatedclosedate != null)
 
-                           if(pre_red_includeintherevenueforecast != null)
 
-                           //if (pre_red_primarysolution != null)
-                             //  opportunity_analysis["red_primarysolution"] = new OptionSetValue(Convert.ToInt32(pre_red_primarysolution));
-                           if (pre_red__basepoint != null)
-                               opportunity_analysis["red_basepoint"] = Decimal.Parse(pre_red__basepoint.ToString());
-                           if (pre_red__asset_value != null)
-                               opportunity_analysis["red_asset_value"] = new Money(Decimal.Parse(pre_red__asset_value.ToString()));
-                           if (pre_red__bps_cal != null)
-                               opportunity_analysis["red_bps_cal"] = new Money(Decimal.Parse(pre_red__bps_cal.ToString()));
-                           if (pre_red__bps_cal_base != null)
-                               opportunity_analysis["red_bps_cal_base"] = new Money(Decimal.Parse(pre_red__bps_cal_base.ToString()));
-                           if (pre_red_deliveryfees != null)
-                               opportunity_analysis["red_deliveryfees"] = new Money(Decimal.Parse(pre_red_deliveryfees.ToString()));
-                           if (post_red_deliveryfees_Base != null)
-                               opportunity_analysis["red_deliveryfees_base"] = new Money(Decimal.Parse(post_red_deliveryfees_Base.ToString()));
+                          if (changed_values != " " || changed_values != null)
+                            {
+                                if (post_estimatedclosedate != null)
 
-                          //     opportunity_analysis["red_multisolution"] = new OptionSetValue(Convert.ToInt32(pre_red_multisolution.ToString()));
-                           if (pre_red_probability != null)
+                                if (post_red_includeintherevenueforecast != null)
 
-                           )); */
+                                if (post_red__Asset_value != null)
 
-                    QueryExpression query = new QueryExpression();
+                                if (post_red__basepoint != null)
+                                    opportunity_analysis["red_new_bps_cal_base"] = new Money(Decimal.Parse(post_red__bps_cal_base.ToString()));
+                              //  if (post_red_primarysolution opportunity_analysis["red_new_bps_cal_base"] = new Money(Decimal.Parse(post_red__bps_cal_base.ToString())); != null)
+
+                                if (post_red__bps_cal != null)
+                                    opportunity_analysis["red_new_bps_cal"] = new Money(Decimal.Parse(post_red__bps_cal.ToString()));
+                          opportunity_analysis["red_new_bps_cal_base"] = new Money(Decimal.Parse(post_red__bps_cal_base.ToString()));
+         opportunity_analysis["red_new_bps_cal_base"] = new Money(Decimal.Parse(post_red__bps_cal_base.ToString()));
+                                if (post_red__bps_cal_base != null)
+                                    opportunity_analysis["red_new_bps_cal_base"] = new Money(Decimal.Parse(post_red__bps_cal_base.ToString()));
+
+         opportunity_analysis["red_new_bps_cal_base"] = new Money(Decimal.Parse(post_red__bps_cal_base.ToString()));
+                                if (post_red_deliveryfees != null)
+
+                                if (post_red_deliveryfees_Base != null)
+                                    opportunity_analysis["red_new_deliveryfees_base"] = new Money(Decimal.Parse(post_red_deliveryfees_Base.ToString()));
+                               // if (post_red_multisolution != null)
+                                 //   opportunity_analysis["red_new_multisolution"] = new OptionSetValue(Convert.ToInt32(post_red_multisolution.ToString()));
+                                if (post_red_probability != null)
+
+
+                                if (post_red_implamentationfee != null)
+
+
+
+                                if (pre_estimatedclosedate != null)
+
+                                if(pre_red_includeintherevenueforecast != null)
+
+                                //if (pre_red_primarysolution != null)
+                                  //  opportunity_analysis["red_primarysolution"] = new OptionSetValue(Convert.ToInt32(pre_red_primarysolution));
+                                if (pre_red__basepoint != null)
+                                    opportunity_analysis["red_basepoint"] = Decimal.Parse(pre_red__basepoint.ToString());
+                                if (pre_red__asset_value != null)
+                                    opportunity_analysis["red_asset_value"] = new Money(Decimal.Parse(pre_red__asset_value.ToString()));
+                                if (pre_red__bps_cal != null)
+                                    opportunity_analysis["red_bps_cal"] = new Money(Decimal.Parse(pre_red__bps_cal.ToString()));
+                                if (pre_red__bps_cal_base != null)
+                                    opportunity_analysis["red_bps_cal_base"] = new Money(Decimal.Parse(pre_red__bps_cal_base.ToString()));
+                                if (pre_red_deliveryfees != null)
+                                    opportunity_analysis["red_deliveryfees"] = new Money(Decimal.Parse(pre_red_deliveryfees.ToString()));
+                                if (post_red_deliveryfees_Base != null)
+                                    opportunity_analysis["red_deliveryfees_base"] = new Money(Decimal.Parse(post_red_deliveryfees_Base.ToString()));
+
+                               //     opportunity_analysis["red_multisolution"] = new OptionSetValue(Convert.ToInt32(pre_red_multisolution.ToString()));
+                                if (pre_red_probability != null)
+
+                                )); */
+
+                        QueryExpression query = new QueryExpression();
 
                         query.EntityName = "red_opportunityanalysis";
                         query.ColumnSet = new ColumnSet(true);
@@ -1036,41 +1118,41 @@ namespace FNZAnalysis
                             service.Create(opportunity_analysis);
                         }
 
-                        
-                   
-                    var jsonValues = "";
-                    var previousChangedValues = "";
-                    var newTextValues = "";
-
-                    Dictionary<string, string> existingValues = new Dictionary<string, string>();
 
 
-                    Entity opp = service.Retrieve(entity.LogicalName, entity.Id, new Microsoft.Xrm.Sdk.Query.ColumnSet(true));
-                    JavaScriptSerializer deSerializer = new JavaScriptSerializer();
-                    JavaScriptSerializer serializer = new JavaScriptSerializer();
+                        var jsonValues = "";
+                        var previousChangedValues = "";
+                        var newTextValues = "";
+
+                        Dictionary<string, string> existingValues = new Dictionary<string, string>();
 
 
-                    if (changeValues.Count > 0)
-                    {
-                        
-                        if  (opp.Attributes.ContainsKey("red_json") && opp.Attributes["red_json"].ToString() != "")
+                        Entity opp = service.Retrieve(entity.LogicalName, entity.Id, new Microsoft.Xrm.Sdk.Query.ColumnSet(true));
+                        JavaScriptSerializer deSerializer = new JavaScriptSerializer();
+                        JavaScriptSerializer serializer = new JavaScriptSerializer();
+
+
+                        if (changeValues.Count > 0)
                         {
 
-                          existingValues = deSerializer.Deserialize<Dictionary<string, string>>(opp.Attributes["red_json"].ToString());
-                        }
+                            if (opp.Attributes.ContainsKey("red_json") && opp.Attributes["red_json"].ToString() != "")
+                            {
 
-                        if (opp.Attributes.ContainsKey("red_texttoadd") && opp.Attributes["red_texttoadd"].ToString() != "")
-                        {
+                                existingValues = deSerializer.Deserialize<Dictionary<string, string>>(opp.Attributes["red_json"].ToString());
+                            }
 
-                            previousChangedValues = opp.Attributes["red_texttoadd"].ToString();
-                            newTextValues = previousChangedValues + "\n";
-                        }
-                        Dictionary<string, string> newValues = new Dictionary<string, string>();
-                        Dictionary<string, string> oldValues = new Dictionary<string, string>();
+                            if (opp.Attributes.ContainsKey("red_texttoadd") && opp.Attributes["red_texttoadd"].ToString() != "")
+                            {
+
+                                previousChangedValues = opp.Attributes["red_texttoadd"].ToString();
+                                newTextValues = previousChangedValues + "\n";
+                            }
+                            Dictionary<string, string> newValues = new Dictionary<string, string>();
+                            Dictionary<string, string> oldValues = new Dictionary<string, string>();
 
 
 
-                        var totalDE = "";
+                            var totalDE = "";
                             var stage = "";
                             var probability = "";
                             var aua = "";
@@ -1078,103 +1160,103 @@ namespace FNZAnalysis
                             var estimateddate = "";
                             var scopingfee = "";
                             var includeForecast = "";
-                        var prioritymatrix= "";
-                        var pretotalDE = "";
-                        var prestage = "";
-                        var preprobability = "";
-                        var preaua = "";
-                        var prebasePoint = "";
-                        var preestimateddate = "";
-                        var prescopingfee = "";
-                        var preincludeForecast = "";
-                        var preprioritymatrix = "";
+                            var prioritymatrix = "";
+                            var pretotalDE = "";
+                            var prestage = "";
+                            var preprobability = "";
+                            var preaua = "";
+                            var prebasePoint = "";
+                            var preestimateddate = "";
+                            var prescopingfee = "";
+                            var preincludeForecast = "";
+                            var preprioritymatrix = "";
 
-                        totalDE = existingValues.ContainsKey("Total D&E Fee :") && changeValues.ContainsKey("Total D&E Fee :") ? changeValues.FirstOrDefault(x => x.Key == "Total D&E Fee :").Value : existingValues.ContainsKey("Total D&E Fee :") ? existingValues.FirstOrDefault(x => x.Key == "Total D&E Fee :").Value : changeValues.ContainsKey("Total D&E Fee :") ? changeValues.FirstOrDefault(x => x.Key == "Total D&E Fee :").Value : "";
+                            totalDE = existingValues.ContainsKey("Total D&E Fee :") && changeValues.ContainsKey("Total D&E Fee :") ? changeValues.FirstOrDefault(x => x.Key == "Total D&E Fee :").Value : existingValues.ContainsKey("Total D&E Fee :") ? existingValues.FirstOrDefault(x => x.Key == "Total D&E Fee :").Value : changeValues.ContainsKey("Total D&E Fee :") ? changeValues.FirstOrDefault(x => x.Key == "Total D&E Fee :").Value : "";
                             stage = existingValues.ContainsKey("Stage:") && changeValues.ContainsKey("Stage:") ? changeValues.FirstOrDefault(x => x.Key == "Stage:").Value : existingValues.ContainsKey("Stage:") ? existingValues.FirstOrDefault(x => x.Key == "Stage:").Value : changeValues.ContainsKey("Stage:") ? changeValues.FirstOrDefault(x => x.Key == "Stage:").Value : "";
                             probability = existingValues.ContainsKey("Probability :") && changeValues.ContainsKey("Probability :") ? changeValues.FirstOrDefault(x => x.Key == "Probability :").Value : existingValues.ContainsKey("Probability :") ? existingValues.FirstOrDefault(x => x.Key == "Probability :").Value : changeValues.ContainsKey("Probability :") ? changeValues.FirstOrDefault(x => x.Key == "Probability :").Value : "";
                             aua = existingValues.ContainsKey("AUA (billion) :") && changeValues.ContainsKey("AUA (billion) :") ? changeValues.FirstOrDefault(x => x.Key == "AUA (billion) :").Value : existingValues.ContainsKey("AUA (billion) :") ? existingValues.FirstOrDefault(x => x.Key == "AUA (billion) :").Value : changeValues.ContainsKey("AUA (billion) :") ? changeValues.FirstOrDefault(x => x.Key == "AUA (billion) :").Value : "";
                             basePoint = existingValues.ContainsKey("Average Basis Point :") && changeValues.ContainsKey("Average Basis Point :") ? changeValues.FirstOrDefault(x => x.Key == "Average Basis Point :").Value : existingValues.ContainsKey("Average Basis Point :") ? existingValues.FirstOrDefault(x => x.Key == "Average Basis Point :").Value : changeValues.ContainsKey("Average Basis Point :") ? changeValues.FirstOrDefault(x => x.Key == "Average Basis Point :").Value : "";
                             estimateddate = existingValues.ContainsKey("Target Signing Date:") && changeValues.ContainsKey("Target Signing Date:") ? changeValues.FirstOrDefault(x => x.Key == "Target Signing Date:").Value : existingValues.ContainsKey("Target Signing Date:") ? existingValues.FirstOrDefault(x => x.Key == "Target Signing Date:").Value : changeValues.ContainsKey("Target Signing Date:") ? changeValues.FirstOrDefault(x => x.Key == "Target Signing Date:").Value : "";
-                            includeForecast = existingValues.ContainsKey("Include in the Revenue Forecast :") && changeValues.ContainsKey("Include in the Revenue Forecast :") ? changeValues.FirstOrDefault(x => x.Key == "Include in the Revenue Forecast :").Value : existingValues.ContainsKey("Include in the Revenue Forecast :") ? existingValues.FirstOrDefault(x => x.Key == "Include in the Revenue Forecast :").Value : changeValues.ContainsKey("Include in the Revenue Forecast :") ? changeValues.FirstOrDefault(x => x.Key == "Include in the Revenue Forecast :").Value :  "";
+                            includeForecast = existingValues.ContainsKey("2022 Commitment:") && changeValues.ContainsKey("2022 Commitment:") ? changeValues.FirstOrDefault(x => x.Key == "2022 Commitment:").Value : existingValues.ContainsKey("2022 Commitment:") ? existingValues.FirstOrDefault(x => x.Key == "2022 Commitment:").Value : changeValues.ContainsKey("2022 Commitment:") ? changeValues.FirstOrDefault(x => x.Key == "2022 Commitment:").Value : "";
                             scopingfee = existingValues.ContainsKey("Total Scoping/Consultancy Fee (million) :") && changeValues.ContainsKey("Total Scoping/Consultancy Fee (million) :") ? changeValues.FirstOrDefault(x => x.Key == "Total Scoping/Consultancy Fee (million) :").Value : existingValues.ContainsKey("Total Scoping/Consultancy Fee (million) :") ? existingValues.FirstOrDefault(x => x.Key == "Total Scoping/Consultancy Fee (million) :").Value : changeValues.ContainsKey("Total Scoping/Consultancy Fee (million) :") ? changeValues.FirstOrDefault(x => x.Key == "Total Scoping/Consultancy Fee (million) :").Value : "";
-                       prioritymatrix = existingValues.ContainsKey("Priority as per Sales Prioritisation Matrix :") && changeValues.ContainsKey("Priority as per Sales Prioritisation Matrix :") ? changeValues.FirstOrDefault(x => x.Key == "Priority as per Sales Prioritisation Matrix :").Value : existingValues.ContainsKey("Priority as per Sales Prioritisation Matrix :") ? existingValues.FirstOrDefault(x => x.Key == "Priority as per Sales Prioritisation Matrix :").Value : changeValues.ContainsKey("Priority as per Sales Prioritisation Matrix :") ? changeValues.FirstOrDefault(x => x.Key == "Priority as per Sales Prioritisation Matrix :").Value : "";
-                        //                        pretotalDE = existingValues.ContainsKey("Total D&E Fee :") && unchangeValues.ContainsKey("Total D&E Fee :") ? unchangeValues.FirstOrDefault(x => x.Key == "Total D&E Fee :").Value : existingValues.ContainsKey("Total D&E Fee :") ? existingValues.FirstOrDefault(x => x.Key == "Total D&E Fee :").Value : unchangeValues.ContainsKey("Total D&E Fee :") ? unchangeValues.FirstOrDefault(x => x.Key == "Total D&E Fee :").Value : "";
-                        //  prestage = existingValues.ContainsKey("Stage:") && unchangeValues.ContainsKey("Stage:") ? unchangeValues.FirstOrDefault(x => x.Key == "Stage:").Value : existingValues.ContainsKey("Stage:") ? existingValues.FirstOrDefault(x => x.Key == "Stage:").Value : unchangeValues.ContainsKey("Stage:") ? unchangeValues.FirstOrDefault(x => x.Key == "Stage:").Value : "";
-                        //preprobability = existingValues.ContainsKey("Probability :") && unchangeValues.ContainsKey("Probability :") ? unchangeValues.FirstOrDefault(x => x.Key == "Probability :").Value : existingValues.ContainsKey("Probability :") ? existingValues.FirstOrDefault(x => x.Key == "Probability :").Value : unchangeValues.ContainsKey("Probability :") ? unchangeValues.FirstOrDefault(x => x.Key == "Probability :").Value : "";
-                        // preaua = existingValues.ContainsKey("AUA (billion) :") && unchangeValues.ContainsKey("AUA (billion) :") ? unchangeValues.FirstOrDefault(x => x.Key == "AUA (billion) :").Value : existingValues.ContainsKey("AUA (billion) :") ? existingValues.FirstOrDefault(x => x.Key == "AUA (billion) :").Value : unchangeValues.ContainsKey("AUA (billion) :") ? unchangeValues.FirstOrDefault(x => x.Key == "AUA (billion) :").Value : "";
-                        //prebasePoint = existingValues.ContainsKey("Average Basis Point :") && unchangeValues.ContainsKey("Average Basis Point :") ? unchangeValues.FirstOrDefault(x => x.Key == "Average Basis Point :").Value : existingValues.ContainsKey("Average Basis Point :") ? existingValues.FirstOrDefault(x => x.Key == "Average Basis Point :").Value : unchangeValues.ContainsKey("Average Basis Point :") ? unchangeValues.FirstOrDefault(x => x.Key == "Average Basis Point :").Value : "";
-                        //preestimateddate = existingValues.ContainsKey("Target Signing Date:") && unchangeValues.ContainsKey("Target Signing Date:") ? unchangeValues.FirstOrDefault(x => x.Key == "Target Signing Date:").Value : existingValues.ContainsKey("Target Signing Date:") ? existingValues.FirstOrDefault(x => x.Key == "Target Signing Date:").Value : unchangeValues.ContainsKey("Target Signing Date:") ? unchangeValues.FirstOrDefault(x => x.Key == "Target Signing Date:").Value : "";
-                        //preincludeForecast = existingValues.ContainsKey("Include in the Revenue Forecast :") && unchangeValues.ContainsKey("Include in the Revenue Forecast :") ? unchangeValues.FirstOrDefault(x => x.Key == "Include in the Revenue Forecast :").Value : existingValues.ContainsKey("Include in the Revenue Forecast :") ? existingValues.FirstOrDefault(x => x.Key == "Include in the Revenue Forecast :").Value : unchangeValues.ContainsKey("Include in the Revenue Forecast :") ? unchangeValues.FirstOrDefault(x => x.Key == "Include in the Revenue Forecast :").Value : "";
-                        //prescopingfee = existingValues.ContainsKey("Total Scoping/Consultancy Fee (million) :") && unchangeValues.ContainsKey("Total Scoping/Consultancy Fee (million) :") ? unchangeValues.FirstOrDefault(x => x.Key == "Total Scoping/Consultancy Fee (million) :").Value : existingValues.ContainsKey("Total Scoping/Consultancy Fee (million) :") ? existingValues.FirstOrDefault(x => x.Key == "Total Scoping/Consultancy Fee (million) :").Value : unchangeValues.ContainsKey("Total Scoping/Consultancy Fee (million) :") ? unchangeValues.FirstOrDefault(x => x.Key == "Total Scoping/Consultancy Fee (million) :").Value : "";
+                            prioritymatrix = existingValues.ContainsKey("Priority:") && changeValues.ContainsKey("Priority:") ? changeValues.FirstOrDefault(x => x.Key == "Priority:").Value : existingValues.ContainsKey("Priority:") ? existingValues.FirstOrDefault(x => x.Key == "Priority:").Value : changeValues.ContainsKey("Priority:") ? changeValues.FirstOrDefault(x => x.Key == "Priority:").Value : "";
+                            //                        pretotalDE = existingValues.ContainsKey("Total D&E Fee :") && unchangeValues.ContainsKey("Total D&E Fee :") ? unchangeValues.FirstOrDefault(x => x.Key == "Total D&E Fee :").Value : existingValues.ContainsKey("Total D&E Fee :") ? existingValues.FirstOrDefault(x => x.Key == "Total D&E Fee :").Value : unchangeValues.ContainsKey("Total D&E Fee :") ? unchangeValues.FirstOrDefault(x => x.Key == "Total D&E Fee :").Value : "";
+                            //  prestage = existingValues.ContainsKey("Stage:") && unchangeValues.ContainsKey("Stage:") ? unchangeValues.FirstOrDefault(x => x.Key == "Stage:").Value : existingValues.ContainsKey("Stage:") ? existingValues.FirstOrDefault(x => x.Key == "Stage:").Value : unchangeValues.ContainsKey("Stage:") ? unchangeValues.FirstOrDefault(x => x.Key == "Stage:").Value : "";
+                            //preprobability = existingValues.ContainsKey("Probability :") && unchangeValues.ContainsKey("Probability :") ? unchangeValues.FirstOrDefault(x => x.Key == "Probability :").Value : existingValues.ContainsKey("Probability :") ? existingValues.FirstOrDefault(x => x.Key == "Probability :").Value : unchangeValues.ContainsKey("Probability :") ? unchangeValues.FirstOrDefault(x => x.Key == "Probability :").Value : "";
+                            // preaua = existingValues.ContainsKey("AUA (billion) :") && unchangeValues.ContainsKey("AUA (billion) :") ? unchangeValues.FirstOrDefault(x => x.Key == "AUA (billion) :").Value : existingValues.ContainsKey("AUA (billion) :") ? existingValues.FirstOrDefault(x => x.Key == "AUA (billion) :").Value : unchangeValues.ContainsKey("AUA (billion) :") ? unchangeValues.FirstOrDefault(x => x.Key == "AUA (billion) :").Value : "";
+                            //prebasePoint = existingValues.ContainsKey("Average Basis Point :") && unchangeValues.ContainsKey("Average Basis Point :") ? unchangeValues.FirstOrDefault(x => x.Key == "Average Basis Point :").Value : existingValues.ContainsKey("Average Basis Point :") ? existingValues.FirstOrDefault(x => x.Key == "Average Basis Point :").Value : unchangeValues.ContainsKey("Average Basis Point :") ? unchangeValues.FirstOrDefault(x => x.Key == "Average Basis Point :").Value : "";
+                            //preestimateddate = existingValues.ContainsKey("Target Signing Date:") && unchangeValues.ContainsKey("Target Signing Date:") ? unchangeValues.FirstOrDefault(x => x.Key == "Target Signing Date:").Value : existingValues.ContainsKey("Target Signing Date:") ? existingValues.FirstOrDefault(x => x.Key == "Target Signing Date:").Value : unchangeValues.ContainsKey("Target Signing Date:") ? unchangeValues.FirstOrDefault(x => x.Key == "Target Signing Date:").Value : "";
+                            //preincludeForecast = existingValues.ContainsKey("Include in the Revenue Forecast :") && unchangeValues.ContainsKey("Include in the Revenue Forecast :") ? unchangeValues.FirstOrDefault(x => x.Key == "Include in the Revenue Forecast :").Value : existingValues.ContainsKey("Include in the Revenue Forecast :") ? existingValues.FirstOrDefault(x => x.Key == "Include in the Revenue Forecast :").Value : unchangeValues.ContainsKey("Include in the Revenue Forecast :") ? unchangeValues.FirstOrDefault(x => x.Key == "Include in the Revenue Forecast :").Value : "";
+                            //prescopingfee = existingValues.ContainsKey("Total Scoping/Consultancy Fee (million) :") && unchangeValues.ContainsKey("Total Scoping/Consultancy Fee (million) :") ? unchangeValues.FirstOrDefault(x => x.Key == "Total Scoping/Consultancy Fee (million) :").Value : existingValues.ContainsKey("Total Scoping/Consultancy Fee (million) :") ? existingValues.FirstOrDefault(x => x.Key == "Total Scoping/Consultancy Fee (million) :").Value : unchangeValues.ContainsKey("Total Scoping/Consultancy Fee (million) :") ? unchangeValues.FirstOrDefault(x => x.Key == "Total Scoping/Consultancy Fee (million) :").Value : "";
 
 
 
-                        newTextValues = "<pre>";
+                            newTextValues = "<pre>";
 
-                       // newTextValues = newTextValues + " Opportunity Name : " + post_name + "\n";
+                            // newTextValues = newTextValues + " Opportunity Name : " + post_name + "\n";
                             if (totalDE != "")
                             {
                                 newValues.Add("Total D&E Fee :", totalDE);
-                            oldValues.Add("Total D&E Fee :", pretotalDE);
+                                oldValues.Add("Total D&E Fee :", pretotalDE);
                                 newTextValues = newTextValues + "Total D&E Fee: " + totalDE + "\n";
                             }
                             if (stage != "")
                             {
                                 newValues.Add("Stage:", stage);
-                            oldValues.Add("Stage:", prestage);
+                                oldValues.Add("Stage:", prestage);
                                 newTextValues = newTextValues + "Stage: " + stage + "\n";
                             }
                             if (probability != "")
                             {
                                 newValues.Add("Probability :", probability);
-                            oldValues.Add("Probability :", preprobability);
-                            newTextValues = newTextValues + "Probability: " + probability + "\n";
+                                oldValues.Add("Probability :", preprobability);
+                                newTextValues = newTextValues + "Probability: " + probability + "\n";
 
                             }
                             if (aua != "")
                             {
                                 newValues.Add("AUA (billion) :", aua);
-                            oldValues.Add("AUA (billion) :", preaua);
+                                oldValues.Add("AUA (billion) :", preaua);
 
-                            newTextValues = newTextValues + "AUA (billion) : " + aua + "\n";
+                                newTextValues = newTextValues + "AUA (billion) : " + aua + "\n";
 
                             }
-                        if (scopingfee != "")
-                        {
-                            newValues.Add("Total Scoping/Consultancy Fee (million) :", scopingfee);
-                            oldValues.Add("Total Scoping/Consultancy Fee (million) :", prescopingfee);
-                            newTextValues = newTextValues + "Total Scoping/Consultancy Fee (million) : " + scopingfee + "\n";
+                            if (scopingfee != "")
+                            {
+                                newValues.Add("Total Scoping/Consultancy Fee (million) :", scopingfee);
+                                oldValues.Add("Total Scoping/Consultancy Fee (million) :", prescopingfee);
+                                newTextValues = newTextValues + "Total Scoping/Consultancy Fee (million) : " + scopingfee + "\n";
 
-                        }
-                        if (basePoint != "")
+                            }
+                            if (basePoint != "")
                             {
                                 newValues.Add("Average Basis Point :", basePoint);
-                            oldValues.Add("Average Basis Point :", prebasePoint);
-                            newTextValues = newTextValues + "Average Basis Point : " + basePoint + "\n";
-                            
+                                oldValues.Add("Average Basis Point :", prebasePoint);
+                                newTextValues = newTextValues + "Average Basis Point : " + basePoint + "\n";
+
                             }
                             if (estimateddate != "")
                             {
                                 newValues.Add("Target Signing Date:", estimateddate);
-                            oldValues.Add("Target Signing Date:", preestimateddate);
-                            newTextValues = newTextValues + "Target Signing Date: " + estimateddate + "\n";
+                                oldValues.Add("Target Signing Date:", preestimateddate);
+                                newTextValues = newTextValues + "Target Signing Date: " + estimateddate + "\n";
 
                             }
                             if (includeForecast != "")
                             {
-                                newValues.Add("Include in the Revenue Forecast :", includeForecast);
-                            oldValues.Add("Include in the Revenue Forecast :", preincludeForecast);
-                            newTextValues = newTextValues + "Include in the Revenue Forecast : " + includeForecast + "\n";
+                                newValues.Add("2022 Commitment:", includeForecast);
+                                oldValues.Add("2022 Commitment:", preincludeForecast);
+                                newTextValues = newTextValues + "2022 Commitment:" + includeForecast + "\n";
 
                             }
-                        if (prioritymatrix != "")
-                        {
-                            newValues.Add("Priority as per Sales Prioritisation Matrix :", prioritymatrix);
-                          //  oldValues.Add("Priority as per sales prioritisation matrix :", preincludeForecast);
-                            newTextValues = newTextValues + "Priority as per sales prioritisation matrix: " + prioritymatrix + "\n";
+                            if (prioritymatrix != "")
+                            {
+                                newValues.Add("Priority:", prioritymatrix);
+                                //  oldValues.Add("Priority as per sales prioritisation matrix :", preincludeForecast);
+                                newTextValues = newTextValues + "Priority: " + prioritymatrix + "\n";
 
-                        }
-                        newTextValues = newTextValues + "</pre>";
+                            }
+                            newTextValues = newTextValues + "</pre>";
 
                             //tracingService.Trace(" Existing Changed values : " + opp.Attributes["red_texttoadd"].ToString());
 
@@ -1184,101 +1266,102 @@ namespace FNZAnalysis
 
                             jsonValues = serializer.Serialize(newValues);
 
-                        var oldJsonValues = "";
+                            var oldJsonValues = "";
 
-                        if (opp.Attributes.ContainsKey("red_oldjson"))
-                        {
-                            var existingOppChanges = opp.Attributes["red_oldjson"].ToString();
-
-                            Dictionary<string, OpportunityChanges> extChanges = serializer.Deserialize<Dictionary<string, OpportunityChanges>>(existingOppChanges);
-                            Dictionary<string, OpportunityChanges> extwithChanges = new Dictionary<string, OpportunityChanges>();
-
-                            foreach (var extVal in extChanges)
+                            if (opp.Attributes.ContainsKey("red_oldjson"))
                             {
-                                if (ocold.ContainsKey(extVal.Key))
+                                var existingOppChanges = opp.Attributes["red_oldjson"].ToString();
+
+                                Dictionary<string, OpportunityChanges> extChanges = serializer.Deserialize<Dictionary<string, OpportunityChanges>>(existingOppChanges);
+                                Dictionary<string, OpportunityChanges> extwithChanges = new Dictionary<string, OpportunityChanges>();
+
+                                foreach (var extVal in extChanges)
                                 {
+                                    if (ocold.ContainsKey(extVal.Key))
+                                    {
 
-                                    OpportunityChanges changes = ocold.Where(x => x.Key == extVal.Key).Select(y => y.Value).FirstOrDefault();
-                                    
-                                    extwithChanges.Add(extVal.Key, changes);
-                                  //  extwithChanges.Add(extVal.Key, ocold.Where(x => x.Key == extVal.Key).Select(y => y.Value));
+                                        OpportunityChanges changes = ocold.Where(x => x.Key == extVal.Key).Select(y => y.Value).FirstOrDefault();
+
+                                        extwithChanges.Add(extVal.Key, changes);
+                                        //  extwithChanges.Add(extVal.Key, ocold.Where(x => x.Key == extVal.Key).Select(y => y.Value));
+                                    }
+                                    else
+                                    {
+
+                                        OpportunityChanges changes = extVal.Value;
+
+                                        extwithChanges.Add(extVal.Key, changes);
+                                        // extwithChanges.Add(extVal.Key, extVal.Value);
+
+                                    }
                                 }
-                                else
+
+                                foreach (var newVal in ocold)
                                 {
-                                    
-                                    OpportunityChanges changes = extVal.Value;
+                                    if (!extwithChanges.ContainsKey(newVal.Key))
+                                    {
+                                        //  extwithChanges.Add(newVal.Key, ocold.Where(x => x.Key == newVal.Key).Select(y => y.Value));
 
-                                    extwithChanges.Add(extVal.Key, changes);
-                                    // extwithChanges.Add(extVal.Key, extVal.Value);
+                                        // OpportunityChanges changes = serializer.Deserialize<OpportunityChanges>(ocold.Where(x => x.Key == newVal.Key).Select(y => y.Value).ToString());
+                                        OpportunityChanges changes = ocold.Where(x => x.Key == newVal.Key).Select(y => y.Value).FirstOrDefault();
+
+                                        extwithChanges.Add(newVal.Key, changes);
+                                    }
 
                                 }
+                                oldJsonValues = serializer.Serialize(extwithChanges);
+
+                            }
+                            else
+                            {
+                                oldJsonValues = serializer.Serialize(ocold);
                             }
 
-                            foreach (var newVal in ocold)
-                            {
-                                if (!extwithChanges.ContainsKey(newVal.Key))
-                                {
-                                    //  extwithChanges.Add(newVal.Key, ocold.Where(x => x.Key == newVal.Key).Select(y => y.Value));
 
-                                   // OpportunityChanges changes = serializer.Deserialize<OpportunityChanges>(ocold.Where(x => x.Key == newVal.Key).Select(y => y.Value).ToString());
-                                    OpportunityChanges changes = ocold.Where(x => x.Key == newVal.Key).Select(y => y.Value).FirstOrDefault();
 
-                                    extwithChanges.Add(newVal.Key, changes);
-                                }
+                            TrackChangedOpportunityFields(entityReference, service, trackedOpportunityFields, jsonValues, oldJsonValues);
 
-                            }
-                            oldJsonValues = serializer.Serialize(extwithChanges);
-
+                            CreateUpdateOpportunityCounting(oc, service);
                         }
-                        else
-                        {
-                            oldJsonValues = serializer.Serialize(ocold);
-                        }
-                        
-                                                   
+                        //else
+                        //{
+                        //    if (changeValues.Count > 0)
+                        //    {
 
-                            TrackChangedOpportunityFields(entityReference, service, trackedOpportunityFields, jsonValues,oldJsonValues);
 
-                        CreateUpdateOpportunityCounting(oc, service);
+                        //        JavaScriptSerializer serializer = new JavaScriptSerializer();
+
+                        //        jsonValues = serializer.Serialize(changeValues);
+
+                        //        tracingService.Trace(" New Changed values : " + trackedOpportunityFields);
+
+                        //        EntityReference entityReference = new EntityReference(entity.LogicalName, entity.Id);
+
+                        //        TrackChangedOpportunityFields(entityReference, service, trackedOpportunityFields, jsonValues);
+
+                        //    }
+                        //}
+
+
+                        tracingService.Trace("Exited Plugin.... OpportunityAnalysis");
+
+
+
                     }
-                    //else
-                    //{
-                    //    if (changeValues.Count > 0)
-                    //    {
-
-
-                    //        JavaScriptSerializer serializer = new JavaScriptSerializer();
-
-                    //        jsonValues = serializer.Serialize(changeValues);
-
-                    //        tracingService.Trace(" New Changed values : " + trackedOpportunityFields);
-
-                    //        EntityReference entityReference = new EntityReference(entity.LogicalName, entity.Id);
-
-                    //        TrackChangedOpportunityFields(entityReference, service, trackedOpportunityFields, jsonValues);
-
-                    //    }
-                    //}
-                          
-
-                    tracingService.Trace("Exited Plugin.... OpportunityAnalysis");
-
-
-
                 }
 
-                catch (FaultException <OrganizationServiceFault> ex)
-                    {
+                catch (FaultException<OrganizationServiceFault> ex)
+                {
 
-                        throw new NotImplementedException();
-                    }
-                    catch (Exception ex)
-                    {
+                    throw new NotImplementedException();
+                }
+                catch (Exception ex)
+                {
 
-                        tracingService.Trace("FollowUpPlugin: {0}", ex.ToString());
-                        throw;
-                
-                    }
+                    tracingService.Trace("FollowUpPlugin: {0}", ex.ToString());
+                    throw;
+
+                }
                 
 
             }
@@ -1326,7 +1409,8 @@ namespace FNZAnalysis
                         ocEntity.Attributes.Add("red_targetsigningdate", Convert.ToInt32(oc.Attributes["red_targetsigningdate"]) + Convert.ToInt32(opportunityCounting.red_targetsigningdate));
                         ocEntity.Attributes.Add("red_totalscopingconsultancyfeemillion", Convert.ToInt32(oc.Attributes["red_totalscopingconsultancyfeemillion"]) + Convert.ToInt32(opportunityCounting.red_totalscopingconsultancyfeemillion));
                         ocEntity.Attributes.Add("red_totaldefeemillion", Convert.ToInt32(oc.Attributes["red_totaldefeemillion"]) + Convert.ToInt32(opportunityCounting.red_totaldefeemillion));
-                        ocEntity.Attributes.Add("red_priorityaspersalesprioritisationmatrix", oc.Attributes.ContainsKey("red_priorityaspersalesprioritisationmatrix") ? Convert.ToInt32(oc.Attributes["red_priorityaspersalesprioritisationmatrix"]) : 0 + Convert.ToInt32(opportunityCounting.red_priorityaspersalesprioritisationmatrix));
+                        // ocEntity.Attributes.Add("red_priorityaspersalesprioritisationmatrix", oc.Attributes.ContainsKey("red_priorityaspersalesprioritisationmatrix") ? Convert.ToInt32(oc.Attributes["red_priorityaspersalesprioritisationmatrix"]) : 0 + Convert.ToInt32(opportunityCounting.red_priorityaspersalesprioritisationmatrix));
+                        ocEntity.Attributes.Add("red_priorityaspersalesprioritisationmatrix", Convert.ToInt32(oc.Attributes["red_priorityaspersalesprioritisationmatrix"]) + Convert.ToInt32(opportunityCounting.red_priorityaspersalesprioritisationmatrix));
                         var sumofaua = Convert.ToInt32(ocEntity.Attributes["red_aua"].ToString());
                         var sumofabp = Convert.ToInt32(ocEntity.Attributes["red_averagebasispoint"].ToString());
                         var sumofirf = Convert.ToInt32(ocEntity.Attributes["red_includeinrevenueforecast"].ToString());
