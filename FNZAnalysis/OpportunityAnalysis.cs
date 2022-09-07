@@ -86,8 +86,10 @@ namespace FNZAnalysis
                     string preopportunitycode = null;
 
                     string pre_StatusCode = null;
+                    string prestatuscode = null;
 
                     string pre_statusreason = null;
+                    string prestatusreason = null;
 
                     string pre_exchangerate = null;
 
@@ -163,6 +165,8 @@ namespace FNZAnalysis
                     string post_StatusCode = null;
 
                     string post_statusreason = null;
+                    string postStatusCode = null;
+                    string postStatusreason = null;
 
 
                     string post_red_multisolution = null;
@@ -329,11 +333,15 @@ namespace FNZAnalysis
                         }
 
                         if (preMessageImage.Attributes.Contains("statecode"))
+                        {
                             pre_StatusCode = ((OptionSetValue)preMessageImage.Attributes["statecode"]).Value.ToString();
-
+                            prestatuscode = preMessageImage.FormattedValues.Where(x => x.Key == "statecode").Select(y => y.Value).First().ToString();
+                        }
                         if (preMessageImage.Attributes.Contains("statuscode"))
+                        {
                             pre_statusreason = ((OptionSetValue)preMessageImage.Attributes["statuscode"]).Value.ToString();
-
+                            prestatusreason = preMessageImage.FormattedValues.Where(x => x.Key == "statuscode").Select(y => y.Value).First().ToString();
+                        }
                         if (preMessageImage.Attributes.Contains("red_probability"))
                         {
                             pre_red_probability = ((OptionSetValue)preMessageImage.Attributes["red_probability"]).Value.ToString();
@@ -508,10 +516,15 @@ namespace FNZAnalysis
                         }
 
                         if (postMessageImage.Attributes.Contains("statecode"))
+                        {
                             post_StatusCode = ((OptionSetValue)postMessageImage.Attributes["statecode"]).Value.ToString();
-
+                            postStatusCode = postMessageImage.FormattedValues.Where(x => x.Key == "statecode").Select(y => y.Value).First().ToString();
+                        }
                         if (postMessageImage.Attributes.Contains("statuscode"))
+                        {
                             post_statusreason = ((OptionSetValue)postMessageImage.Attributes["statuscode"]).Value.ToString();
+                            postStatusreason = postMessageImage.FormattedValues.Where(x => x.Key == "statuscode").Select(y => y.Value).First().ToString();
+                        }
 
                         if (postMessageImage.Attributes.Contains("red_sltmember"))
                             post_red_sltmember = ((OptionSetValue)postMessageImage.Attributes["red_sltmember"]).Value.ToString();
@@ -595,10 +608,10 @@ namespace FNZAnalysis
                             changes.PreviousInput = pre_estimatedclosedate;
                             changes.PresentInput = post_estimatedclosedate;
                             changes.CustomerName = pre_parentaccountid.Name;
-                           // changes.Modifiedby = post_modifiedby.Name;
+                            changes.Modifiedby = post_modifiedby.Name;
                             changes.SLTMember = postSltmember;
                             changes.Modifiedon = Post_modifiedon;
-                          //  changes.DealOwner = post_dealowner.Name;
+                            changes.DealOwner = post_dealowner.Name;
 
 
 
@@ -623,10 +636,10 @@ namespace FNZAnalysis
                             revenuechanges.PreviousInput = preincludeinrevenue;
                             revenuechanges.PresentInput = postincludeinrevenue;
                             revenuechanges.CustomerName = pre_parentaccountid.Name;
-//      revenuechanges.Modifiedby = post_modifiedby.Name;
+                            revenuechanges.Modifiedby = post_modifiedby.Name;
                             revenuechanges.SLTMember = postSltmember;
                             revenuechanges.Modifiedon = Post_modifiedon;
-                         //  revenuechanges.DealOwner = post_dealowner.Name;
+                            revenuechanges.DealOwner = post_dealowner.Name;
 
 
                             // ocold.Add("Target Signing Date:", pre_estimatedclosedate.ToString());
@@ -656,10 +669,10 @@ namespace FNZAnalysis
                             AUAchanges.PreviousInput = pre_red__asset_value;
                             AUAchanges.PresentInput = post_red__Asset_value;
                             AUAchanges.CustomerName = pre_parentaccountid.Name;
-                           // AUAchanges.Modifiedby = post_modifiedby.Name;
+                            AUAchanges.Modifiedby = post_modifiedby.Name;
                             AUAchanges.SLTMember = postSltmember;
                             AUAchanges.Modifiedon = Post_modifiedon;
-                        //   AUAchanges.DealOwner = post_dealowner.Name;
+                          AUAchanges.DealOwner = post_dealowner.Name;
 
 
                             ocold.Add("AUA", AUAchanges);
@@ -691,6 +704,25 @@ namespace FNZAnalysis
                         {
                             opportunity_analysis["red_status"] = new OptionSetValue(Convert.ToInt32(pre_StatusCode.ToString()));
                             opportunity_analysis["red_newstatus"] = new OptionSetValue(Convert.ToInt32(post_StatusCode.ToString()));
+                           
+                            changeValues.Add("Status", post_StatusCode);
+
+                            OpportunityChanges statuscodechanges = new OpportunityChanges();
+                            statuscodechanges.SummaryDescription = pre_name;
+                            statuscodechanges.opportunitycode = post_uniqueid;
+                            statuscodechanges.Division = post_red_division.Name;
+                            statuscodechanges.ElementChanged = "Status";
+                            statuscodechanges.PreviousInput = prestatuscode;
+                            statuscodechanges.PresentInput = postStatusCode;
+                            statuscodechanges.CustomerName = pre_parentaccountid.Name;
+                            statuscodechanges.Modifiedby = post_modifiedby.Name;
+                            statuscodechanges.SLTMember = postSltmember;
+                            statuscodechanges.Modifiedon = Post_modifiedon;
+                            statuscodechanges.DealOwner = post_dealowner.Name;
+
+                            ocold.Add("Status", statuscodechanges);
+                            oc.red_status = 1;
+
                         }
 
 
@@ -698,6 +730,24 @@ namespace FNZAnalysis
                         {
                             opportunity_analysis["red_statusreason"] = new OptionSetValue(Convert.ToInt32(pre_statusreason.ToString()));
                             opportunity_analysis["red_newstatusreason"] = new OptionSetValue(Convert.ToInt32(post_statusreason.ToString()));
+
+                            changeValues.Add("Status Reason", post_statusreason);
+
+                            OpportunityChanges statusreasonchanges = new OpportunityChanges();
+                            statusreasonchanges.SummaryDescription = pre_name;
+                            statusreasonchanges.opportunitycode = post_uniqueid;
+                            statusreasonchanges.Division = post_red_division.Name;
+                            statusreasonchanges.ElementChanged = "Status Reason";
+                            statusreasonchanges.PreviousInput = prestatusreason;
+                            statusreasonchanges.PresentInput = postStatusreason;
+                            statusreasonchanges.CustomerName = pre_parentaccountid.Name;
+                            statusreasonchanges.Modifiedby = post_modifiedby.Name;
+                            statusreasonchanges.SLTMember = postSltmember;
+                            statusreasonchanges.Modifiedon = Post_modifiedon;
+                            statusreasonchanges.DealOwner = post_dealowner.Name;
+
+                            ocold.Add("Status Reason", statusreasonchanges);
+                            oc.red_statusreason = 1;
                         }
                         if (pre_opportunityratingcode != null && pre_opportunityratingcode != post_opportunityratingcode)
                         {
@@ -715,10 +765,10 @@ namespace FNZAnalysis
                             prioritychanges.PreviousInput = preopportunitycode;
                             prioritychanges.PresentInput = postopportunitycode;
                             prioritychanges.CustomerName = pre_parentaccountid.Name;
-                           // prioritychanges.Modifiedby = post_modifiedby.Name;
+                            prioritychanges.Modifiedby = post_modifiedby.Name;
                             prioritychanges.SLTMember = postSltmember;
                             prioritychanges.Modifiedon = Post_modifiedon;
-                         //   prioritychanges.DealOwner = post_dealowner.Name;
+                            prioritychanges.DealOwner = post_dealowner.Name;
 
 
 
@@ -745,10 +795,10 @@ namespace FNZAnalysis
                             scopechanges.PreviousInput = pre_red__consultancy_fee;
                             scopechanges.PresentInput = post_red__consultancy_fee;
                             scopechanges.CustomerName = pre_parentaccountid.Name;
-                            //scopechanges.Modifiedby = post_modifiedby.Name;
+                            scopechanges.Modifiedby = post_modifiedby.Name;
                             scopechanges.SLTMember = postSltmember;
                             scopechanges.Modifiedon = Post_modifiedon;
-                           // scopechanges.DealOwner = post_dealowner.Name;
+                            scopechanges.DealOwner = post_dealowner.Name;
 
                             ocold.Add("TotalScoping", scopechanges);
                             // unchangeValues.Add("Total Scoping/Consultancy Fee (million) :", pre_red__consultancy_fee.ToString());
@@ -780,10 +830,10 @@ namespace FNZAnalysis
                             DEchanges.PreviousInput = pre_red_implamentationfee;
                             DEchanges.PresentInput = post_red_implamentationfee;
                             DEchanges.CustomerName = pre_parentaccountid.Name;
-                          // DEchanges.Modifiedby = post_modifiedby.Name;
+                           DEchanges.Modifiedby = post_modifiedby.Name;
                             DEchanges.SLTMember = postSltmember;
                             DEchanges.Modifiedon = Post_modifiedon;
-                         //  DEchanges.DealOwner = post_dealowner.Name;
+                           DEchanges.DealOwner = post_dealowner.Name;
 
                             ocold.Add("TotalDandE", DEchanges);
 
@@ -861,10 +911,10 @@ namespace FNZAnalysis
                             ABPchanges.PreviousInput = pre_red__basepoint;
                             ABPchanges.PresentInput = post_red__basepoint;
                             ABPchanges.CustomerName = pre_parentaccountid.Name;
-                          // ABPchanges.Modifiedby = post_modifiedby.Name;
+                           ABPchanges.Modifiedby = post_modifiedby.Name;
                             ABPchanges.SLTMember = postSltmember;
                             ABPchanges.Modifiedon = Post_modifiedon;
-                         //  ABPchanges.DealOwner = post_dealowner.Name;
+                           ABPchanges.DealOwner = post_dealowner.Name;
 
                             ocold.Add("AverageBasisPoint", ABPchanges);
                             // unchangeValues.Add("Average Basis Point :", pre_red__basepoint.ToString());
@@ -966,10 +1016,10 @@ namespace FNZAnalysis
                             prochanges.PreviousInput = preProbabilityValue;
                             prochanges.PresentInput = postProbabilityValue;
                             prochanges.CustomerName = pre_parentaccountid.Name;
-                        //  prochanges.Modifiedby = post_modifiedby.Name;
+                          prochanges.Modifiedby = post_modifiedby.Name;
                             prochanges.SLTMember = postSltmember;
                             prochanges.Modifiedon = Post_modifiedon;
-                        //   prochanges.DealOwner = post_dealowner.Name;
+                           prochanges.DealOwner = post_dealowner.Name;
 
 
 
@@ -1000,10 +1050,10 @@ namespace FNZAnalysis
                                 stagechanges.PreviousInput = preStageValue;
                                 stagechanges.PresentInput = postStageValue;
                                 stagechanges.CustomerName = pre_parentaccountid.Name;
-                            //    stagechanges.Modifiedby = post_modifiedby.Name;
+                                stagechanges.Modifiedby = post_modifiedby.Name;
                                 stagechanges.SLTMember = postSltmember;
                                 stagechanges.Modifiedon = Post_modifiedon;
-                             //  stagechanges.DealOwner = post_dealowner.Name;
+                              stagechanges.DealOwner = post_dealowner.Name;
 
                                 ocold.Add("Stage", stagechanges);
 
@@ -1170,6 +1220,8 @@ namespace FNZAnalysis
                             var prescopingfee = "";
                             var preincludeForecast = "";
                             var preprioritymatrix = "";
+                            var status = "";
+                            var statusreason = "";
 
                             totalDE = existingValues.ContainsKey("Total D&E Fee :") && changeValues.ContainsKey("Total D&E Fee :") ? changeValues.FirstOrDefault(x => x.Key == "Total D&E Fee :").Value : existingValues.ContainsKey("Total D&E Fee :") ? existingValues.FirstOrDefault(x => x.Key == "Total D&E Fee :").Value : changeValues.ContainsKey("Total D&E Fee :") ? changeValues.FirstOrDefault(x => x.Key == "Total D&E Fee :").Value : "";
                             stage = existingValues.ContainsKey("Stage:") && changeValues.ContainsKey("Stage:") ? changeValues.FirstOrDefault(x => x.Key == "Stage:").Value : existingValues.ContainsKey("Stage:") ? existingValues.FirstOrDefault(x => x.Key == "Stage:").Value : changeValues.ContainsKey("Stage:") ? changeValues.FirstOrDefault(x => x.Key == "Stage:").Value : "";
@@ -1180,6 +1232,9 @@ namespace FNZAnalysis
                             includeForecast = existingValues.ContainsKey("2022 Commitment:") && changeValues.ContainsKey("2022 Commitment:") ? changeValues.FirstOrDefault(x => x.Key == "2022 Commitment:").Value : existingValues.ContainsKey("2022 Commitment:") ? existingValues.FirstOrDefault(x => x.Key == "2022 Commitment:").Value : changeValues.ContainsKey("2022 Commitment:") ? changeValues.FirstOrDefault(x => x.Key == "2022 Commitment:").Value : "";
                             scopingfee = existingValues.ContainsKey("Total Scoping/Consultancy Fee (million) :") && changeValues.ContainsKey("Total Scoping/Consultancy Fee (million) :") ? changeValues.FirstOrDefault(x => x.Key == "Total Scoping/Consultancy Fee (million) :").Value : existingValues.ContainsKey("Total Scoping/Consultancy Fee (million) :") ? existingValues.FirstOrDefault(x => x.Key == "Total Scoping/Consultancy Fee (million) :").Value : changeValues.ContainsKey("Total Scoping/Consultancy Fee (million) :") ? changeValues.FirstOrDefault(x => x.Key == "Total Scoping/Consultancy Fee (million) :").Value : "";
                             prioritymatrix = existingValues.ContainsKey("Priority:") && changeValues.ContainsKey("Priority:") ? changeValues.FirstOrDefault(x => x.Key == "Priority:").Value : existingValues.ContainsKey("Priority:") ? existingValues.FirstOrDefault(x => x.Key == "Priority:").Value : changeValues.ContainsKey("Priority:") ? changeValues.FirstOrDefault(x => x.Key == "Priority:").Value : "";
+                            status = existingValues.ContainsKey("Status") && changeValues.ContainsKey("Status") ? changeValues.FirstOrDefault(x => x.Key == "Status").Value : existingValues.ContainsKey("Status") ? existingValues.FirstOrDefault(x => x.Key == "Status").Value : changeValues.ContainsKey("Status") ? changeValues.FirstOrDefault(x => x.Key == "Status").Value : "";
+                            statusreason = existingValues.ContainsKey("Status Reason") && changeValues.ContainsKey("Status Reason") ? changeValues.FirstOrDefault(x => x.Key == "Status Reason").Value : existingValues.ContainsKey("Status Reason") ? existingValues.FirstOrDefault(x => x.Key == "Status Reason").Value : changeValues.ContainsKey("Status Reason") ? changeValues.FirstOrDefault(x => x.Key == "Status Reason").Value : "";
+
                             //                        pretotalDE = existingValues.ContainsKey("Total D&E Fee :") && unchangeValues.ContainsKey("Total D&E Fee :") ? unchangeValues.FirstOrDefault(x => x.Key == "Total D&E Fee :").Value : existingValues.ContainsKey("Total D&E Fee :") ? existingValues.FirstOrDefault(x => x.Key == "Total D&E Fee :").Value : unchangeValues.ContainsKey("Total D&E Fee :") ? unchangeValues.FirstOrDefault(x => x.Key == "Total D&E Fee :").Value : "";
                             //  prestage = existingValues.ContainsKey("Stage:") && unchangeValues.ContainsKey("Stage:") ? unchangeValues.FirstOrDefault(x => x.Key == "Stage:").Value : existingValues.ContainsKey("Stage:") ? existingValues.FirstOrDefault(x => x.Key == "Stage:").Value : unchangeValues.ContainsKey("Stage:") ? unchangeValues.FirstOrDefault(x => x.Key == "Stage:").Value : "";
                             //preprobability = existingValues.ContainsKey("Probability :") && unchangeValues.ContainsKey("Probability :") ? unchangeValues.FirstOrDefault(x => x.Key == "Probability :").Value : existingValues.ContainsKey("Probability :") ? existingValues.FirstOrDefault(x => x.Key == "Probability :").Value : unchangeValues.ContainsKey("Probability :") ? unchangeValues.FirstOrDefault(x => x.Key == "Probability :").Value : "";
@@ -1205,6 +1260,18 @@ namespace FNZAnalysis
                                 newValues.Add("Stage:", stage);
                                 oldValues.Add("Stage:", prestage);
                                 newTextValues = newTextValues + "Stage: " + stage + "\n";
+                            }
+                            if (status != "")
+                            {
+                                newValues.Add("Status:", status);
+                                //oldValues.Add("Status:", prestage);
+                                newTextValues = newTextValues + "Status: " + status + "\n";
+                            }
+                            if (status != "")
+                            {
+                                newValues.Add("Status Reason:", status);
+                                //oldValues.Add("Status:", prestage);
+                                newTextValues = newTextValues + "Status Reason: " + statusreason + "\n";
                             }
                             if (probability != "")
                             {
@@ -1411,6 +1478,9 @@ namespace FNZAnalysis
                         ocEntity.Attributes.Add("red_totaldefeemillion", Convert.ToInt32(oc.Attributes["red_totaldefeemillion"]) + Convert.ToInt32(opportunityCounting.red_totaldefeemillion));
                         // ocEntity.Attributes.Add("red_priorityaspersalesprioritisationmatrix", oc.Attributes.ContainsKey("red_priorityaspersalesprioritisationmatrix") ? Convert.ToInt32(oc.Attributes["red_priorityaspersalesprioritisationmatrix"]) : 0 + Convert.ToInt32(opportunityCounting.red_priorityaspersalesprioritisationmatrix));
                         ocEntity.Attributes.Add("red_priorityaspersalesprioritisationmatrix", Convert.ToInt32(oc.Attributes["red_priorityaspersalesprioritisationmatrix"]) + Convert.ToInt32(opportunityCounting.red_priorityaspersalesprioritisationmatrix));
+                        ocEntity.Attributes.Add("red_status", Convert.ToInt32(oc.Attributes["red_status"]) + Convert.ToInt32(opportunityCounting.red_status));
+                        ocEntity.Attributes.Add("red_statusreason", Convert.ToInt32(oc.Attributes["red_statusreason"]) + Convert.ToInt32(opportunityCounting.red_statusreason));
+
                         var sumofaua = Convert.ToInt32(ocEntity.Attributes["red_aua"].ToString());
                         var sumofabp = Convert.ToInt32(ocEntity.Attributes["red_averagebasispoint"].ToString());
                         var sumofirf = Convert.ToInt32(ocEntity.Attributes["red_includeinrevenueforecast"].ToString());
@@ -1420,7 +1490,9 @@ namespace FNZAnalysis
                         var sumofTSCF = Convert.ToInt32(ocEntity.Attributes["red_totalscopingconsultancyfeemillion"].ToString());
                         var sumofTDEfee = Convert.ToInt32(ocEntity.Attributes["red_totaldefeemillion"].ToString());
                         var sumofpriority = Convert.ToInt32(ocEntity.Attributes["red_priorityaspersalesprioritisationmatrix"].ToString());
-                        var totalchanges = (sumofabp + sumofaua + sumofirf + sumofprobability + sumofstage + sumofTSD + sumofTSCF + sumofTDEfee + sumofpriority);
+                        var sumofstatus = Convert.ToInt32(ocEntity.Attributes["red_status"].ToString());
+                        var sumofstatusreason = Convert.ToInt32(ocEntity.Attributes["red_statusreason"].ToString());
+                        var totalchanges = (sumofabp + sumofaua + sumofirf + sumofprobability + sumofstage + sumofTSD + sumofTSCF + sumofTDEfee + sumofpriority + sumofstatus+sumofstatusreason);
 
                         ocEntity.Attributes.Add("red_totalchanges", totalchanges);
                         

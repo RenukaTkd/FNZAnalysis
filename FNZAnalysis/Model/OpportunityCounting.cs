@@ -21,6 +21,10 @@ namespace FNZAnalysis.Model
         public int red_totalscopingconsultancyfeemillion { get; set; }
         public int red_totaldefeemillion { get; set; }
 
+        public int red_status { get; set; }
+        public int red_statusreason { get; set; }
+
+
         public int red_priorityaspersalesprioritisationmatrix { get; set; }
     }
 }
